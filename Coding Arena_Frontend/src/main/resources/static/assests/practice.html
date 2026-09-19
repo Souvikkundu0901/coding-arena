@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Coding Arena practice problems.">
+    <title>Coding Arena | Practice Problems</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/practice.css">
+</head>
+
+<body class="ca-body ca-practice-page">
+    <div class="ca-practice-shell">
+        <header class="ca-practice-topbar">
+            <a href="index.html" class="ca-practice-brand text-decoration-none" aria-label="Coding Arena dashboard">
+                <span class="ca-practice-brand__brace">{</span>
+                <span>Coding Arena</span>
+                <span class="ca-practice-brand__brace">}</span>
+            </a>
+
+            <a href="index.html" class="ca-practice-backlink">
+                <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                <span>Dashboard</span>
+            </a>
+        </header>
+
+        <main class="ca-practice-main container-fluid">
+            <section class="ca-practice-hero">
+                <div>
+                    <div class="ca-practice-eyebrow">Practice Arena</div>
+                    <h1 class="ca-practice-title">Practice Problems</h1>
+                    <p class="ca-practice-subtitle">Sharpen your skills before your next battle.</p>
+                </div>
+                <div class="ca-practice-hero-mark" aria-hidden="true">
+                    <span>&lt;/&gt;</span>
+                </div>
+            </section>
+
+            <section class="ca-practice-filterbar" aria-label="Problem filters">
+                <div class="ca-filter-group ca-filter-group--search">
+                    <label class="ca-filter-label" for="searchInput">Search</label>
+                    <div class="ca-practice-search">
+                        <i class="bi bi-search" aria-hidden="true"></i>
+                        <input type="text" id="searchInput" class="form-control ca-filter-input"
+                            placeholder="Search by title..." autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="ca-filter-group">
+                    <label class="ca-filter-label" for="difficultyFilter">Difficulty</label>
+                    <select id="difficultyFilter" class="form-select ca-filter-input">
+                        <option value="">All</option>
+                        <option value="EASY">Easy</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="HARD">Hard</option>
+                    </select>
+                </div>
+
+                <div class="ca-filter-group">
+                    <label class="ca-filter-label" for="tagFilter">Tag</label>
+                    <select id="tagFilter" class="form-select ca-filter-input">
+                        <option value="">All Tags</option>
+                    </select>
+                </div>
+            </section>
+
+            <section class="ca-practice-list-panel">
+                <div class="ca-practice-list-header">
+                    <div>
+                        <div class="ca-practice-section-kicker">Problem Set</div>
+                        <h2 class="ca-practice-list-title">Choose a problem</h2>
+                    </div>
+                    <div class="ca-practice-list-meta"><i class="bi bi-lightning-charge-fill" aria-hidden="true"></i>
+                        Solve at your pace</div>
+                </div>
+
+                <div id="problemListContainer" class="ca-problem-list">
+                    <p class="ca-problem-list__loading">Loading problems...</p>
+                </div>
+            </section>
+        </main>
+    </div>        <script src="../js/theme.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>    <script src="../js/api.js"></script>    <script src="../js/auth.js"></script>    <script src="../js/websocket.js"></script>    <script src="../js/practice.js"></script>
+</body>
+
+</html>

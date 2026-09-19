@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Coding Arena practice problem solver.">
+    <title>Coding Arena | Solve Problem</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/practice.css">
+    <link rel="stylesheet" href="../css/practice-solve.css">
+
+    <!-- CodeMirror 5 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/base16-dark.min.css">
+</head>
+
+<body class="ca-body ca-practice-solve-page">
+    <div class="ca-solve-shell">
+        <header class="ca-practice-topbar">
+            <a href="index.html" class="ca-practice-brand text-decoration-none" aria-label="Coding Arena dashboard">
+                <span class="ca-practice-brand__brace">{</span>
+                <span>Coding Arena</span>
+                <span class="ca-practice-brand__brace">}</span>
+            </a>
+
+            <a href="practice.html" class="ca-practice-backlink">
+                <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                <span>All Problems</span>
+            </a>
+        </header>
+
+        <main class="ca-solve-main container-fluid">
+            <div class="ca-solve-header">
+                <div>
+                    <div class="ca-practice-eyebrow">Practice / Solo</div>
+                    <p class="ca-solve-helper">Solve, submit, and improve — no opponent required.</p>
+                </div>
+                <div class="ca-solve-live-chip"><span></span> Practice mode</div>
+            </div>
+
+            <div class="ca-solve-grid">
+                <section class="ca-solve-problem-panel ca-panel" aria-label="Problem description">
+                    <div class="ca-solve-problem-top">
+                        <div>
+                            <div class="ca-solve-panel-kicker">Problem</div>
+                            <h1 id="solveProblemTitle" class="ca-solve-problem-title">Loading...</h1>
+                        </div>
+                        <span id="solveProblemDifficulty" class="ca-diff-pill ca-diff-pill--medium">—</span>
+                    </div>
+
+                    <div id="solveProblemTags" class="ca-tag-row ca-solve-tags"></div>
+
+                    <div class="ca-solve-copy-label">Description</div>
+                    <p id="solveProblemDescription" class="ca-solve-problem-description">Loading problem description...
+                    </p>
+
+                    <div class="ca-solve-examples-heading">
+                        <i class="bi bi-terminal-fill" aria-hidden="true"></i>
+                        <span>Examples</span>
+                    </div>
+                    <div id="solveProblemExamples" class="ca-solve-code-block"></div>
+                </section>
+
+                <section class="ca-solve-editor-panel ca-panel" aria-label="Code editor">
+                    <div class="ca-solve-editor-toolbar">
+                        <div>
+                            <div class="ca-solve-panel-kicker">Your solution</div>
+                            <div class="ca-solve-editor-title">Write your code</div>
+                        </div>
+                        <div class="ca-solve-language-wrap">
+                            <label for="solveLanguageSelect" class="ca-filter-label">Language</label>
+                            <select id="solveLanguageSelect" class="form-select ca-filter-input ca-solve-lang-select">
+                                <option value="python">Python</option>
+                                <option value="java">Java</option>
+                                <option value="cpp">C++</option>
+                                <option value="c">C</option>
+                                <option value="javascript">JavaScript</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="ca-solve-editor-body">
+                        <textarea id="solveCodeInput" class="ca-solve-textarea" spellcheck="false"
+                            placeholder="Write your solution here..."></textarea>
+                    </div>
+
+                    <div class="ca-solve-editor-footer">
+                        <div class="ca-solve-submit-hint"><i class="bi bi-command" aria-hidden="true"></i> Submit when
+                            your solution is ready</div>
+                        <button type="button" id="solveSubmitBtn" class="ca-solve-submit-btn">
+                            <i class="bi bi-send-fill" aria-hidden="true"></i>
+                            <span>Submit Solution</span>
+                        </button>
+                    </div>
+
+                    <div id="solveVerdictDisplay" class="ca-solve-verdict" style="display:none" role="status"
+                        aria-live="polite"></div>
+                </section>
+            </div>
+        </main>
+    </div>        <script src="../js/theme.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+
+    <!-- CodeMirror 5 JavaScript -->    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>    <script src="../js/api.js"></script>    <script src="../js/auth.js"></script>    <script src="../js/websocket.js"></script>    <script src="../js/practice-solve.js"></script>
+</body>
+
+</html>

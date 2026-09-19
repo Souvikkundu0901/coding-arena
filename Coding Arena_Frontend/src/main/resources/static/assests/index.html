@@ -1,0 +1,251 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coding Arena â€” 1v1 Coding Battles</title>
+
+  <!-- Google Fonts: Baloo 2 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body class="ca-body">
+
+  <div class="ca-board" role="presentation" aria-hidden="true"></div>
+
+  <div class="container-fluid ca-viewport">
+    <div class="row g-3 g-lg-4">
+
+      <!-- ============ TOP-LEFT: player stack ============ -->
+      <aside class="col-12 col-lg-3 order-2 order-lg-1">
+        <div class="ca-col-stack">
+
+          <!-- Rating pill -->
+          <div class="ca-panel ca-panel--tight ca-rating-panel">
+            <span class="ca-badge-pill ca-badge-pill--rating">
+              <i class="bi bi-lightning-charge-fill"></i>
+              <span class="ca-badge-pill__label">Rating</span>
+              <span class="ca-badge-pill__value" id="userRatingValue">â€”</span>
+            </span>
+          </div>
+
+          <!-- Wins / Losses card -->
+          <div class="ca-panel">
+            <h2 class="ca-panel__title">Record</h2>
+            <div class="ca-stat-row">
+              <span class="ca-stat-pill ca-stat-pill--win">
+                <i class="bi bi-trophy-fill"></i> Wins
+                <strong class="ca-stat-pill__count" id="userWinsCount">â€”</strong>
+              </span>
+              <span class="ca-stat-pill ca-stat-pill--loss">
+                <i class="bi bi-x-octagon-fill"></i> Losses
+                <strong class="ca-stat-pill__count" id="userLossesCount">â€”</strong>
+              </span>
+            </div>
+          </div>
+
+          <!-- Menu panel -->
+          <nav class="ca-panel ca-menu-panel" aria-label="Player menu">
+            <a href="profile.html" class="ca-menu-btn">
+              <i class="bi bi-person-badge-fill"></i>
+              <span>Customize Profile</span>
+              <i class="bi bi-chevron-right ca-menu-btn__chevron"></i>
+            </a>
+            <a href="practice.html" class="ca-menu-btn">
+              <i class="bi bi-code-slash"></i>
+              <span>Practice Problems</span>
+              <i class="bi bi-chevron-right ca-menu-btn__chevron"></i>
+            </a>
+            <a href="settings.html" class="ca-menu-btn">
+              <i class="bi bi-gear-fill"></i>
+              <span>Sign Settings</span>
+              <i class="bi bi-chevron-right ca-menu-btn__chevron"></i>
+            </a>
+          </nav>
+
+        </div>
+      </aside>
+
+      <!-- ============ CENTER: arena / play ============ -->
+      <main class="col-12 col-lg-6 order-1 order-lg-2">
+        <div class="ca-arena">
+
+          <h1 class="ca-wordmark">
+            <span class="ca-wordmark__coding">CODING</span>
+            <span class="ca-wordmark__arena">ARENA</span>
+          </h1>
+          <p class="ca-tagline">Queue up. Out-code your rival. Climb the ranks.</p>
+
+          <div id="ca-hero-icon" class="ca-hero-icon" aria-hidden="true"></div>
+
+          <a id="findMatchBtn" href="queue.html" class="ca-play-btn">
+            <i class="bi bi-play-fill ca-play-btn__icon"></i>
+            <span class="ca-play-btn__text">PLAY</span>
+          </a>
+          <p class="ca-play-hint">Lets Go!!</p>
+
+
+        </div>
+      </main>
+
+      <!-- ============ TOP-RIGHT: profile + matches ============ -->
+      <aside class="col-12 col-lg-3 order-3 order-lg-3">
+        <div class="ca-col-stack">
+
+          <div class="dropdown ca-profile-dropdown">
+            <button class="ca-avatar-pill dropdown-toggle" type="button" id="ca-profile-menu" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <img src="https://api.dicebear.com/7.x/bottts/svg?seed=CodeKnight" alt="" class="ca-avatar-pill__img"
+                id="userAvatarImg">
+              <span class="ca-avatar-pill__name" id="userDisplayName">â€”</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end ca-dropdown-menu" aria-labelledby="ca-profile-menu">
+              <li><a class="dropdown-item" href="profile.html"><i class="bi bi-person-fill"></i> View Profile</a></li>
+              <li><a class="dropdown-item" href="settings.html"><i class="bi bi-gear-fill"></i> Settings</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> Sign Out</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="ca-panel ca-matches-panel">
+            <h2 class="ca-panel__title">Recent Matches</h2>
+            <ul class="ca-matches-list" id="recentMatchesList">
+              <li class="ca-match-row ca-match-row--placeholder">Loading matchesâ€¦</li>
+            </ul>
+          </div>
+
+          <!-- Social launcher -->
+          <button type="button" class="ca-social-btn" data-bs-toggle="modal" data-bs-target="#socialModal"
+            aria-controls="socialModal">
+            <span class="ca-social-btn__icon"><i class="bi bi-people-fill"></i></span>
+            <span class="ca-social-btn__copy">
+              <span class="ca-social-btn__eyebrow">SOCIAL</span>
+              <span class="ca-social-btn__title">Friends &amp; Challenges</span>
+              <span class="ca-social-btn__subtitle">Add friends, manage requests, and challenge your circle.</span>
+            </span>
+            <i class="bi bi-arrow-up-right ca-social-btn__arrow" aria-hidden="true"></i>
+          </button>
+
+        </div>
+      </aside>
+
+      <!-- ============ BOTTOM: recommended problems ============ -->
+      <section class="col-12 order-4 ca-problems-section" aria-labelledby="ca-problems-heading">
+        <div class="ca-panel ca-problems-panel">
+          <h2 class="ca-panel__title" id="ca-problems-heading">Recommended Problems</h2>
+          <div id="recommendedProblemsScroller" class="ca-problems-scroller">
+            <p class="ca-problems-loading">Loading problemsâ€¦</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>        <script src="../js/theme.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>    <script src="../js/api.js"></script>    <script src="../js/auth.js"></script>    <script src="../js/websocket.js"></script>    <script src="../js/dashboard.js"></script>    <script src="../js/friends.js"></script>
+
+
+  <!-- Social center modal -->
+  <div class="modal fade ca-social-modal-shell" id="socialModal" tabindex="-1" aria-labelledby="socialModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+      <div class="modal-content ca-social-modal">
+        <div class="ca-social-modal__header">
+          <div>
+            <span class="ca-social-modal__eyebrow">SOCIAL HUB</span>
+            <h2 id="socialModalTitle" class="ca-social-modal__title">Friends &amp; Challenges</h2>
+            <p class="ca-social-modal__subtitle">Build your battle circle, manage requests, and challenge friends.</p>
+          </div>
+          <button type="button" class="ca-social-modal__close" data-bs-dismiss="modal" aria-label="Close social hub">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+
+        <div class="ca-social-modal__body">
+          <section class="ca-social-card ca-social-card--primary">
+            <div class="ca-social-card__heading">
+              <div>
+                <span class="ca-social-card__eyebrow">ADD FRIEND</span>
+                <h3 class="ca-social-card__title">Grow your battle circle</h3>
+              </div>
+              <span class="ca-social-card__icon"><i class="bi bi-person-plus-fill"></i></span>
+            </div>
+
+            <form id="addFriendForm" class="ca-add-friend-form">
+              <div class="ca-add-friend-input-wrap">
+                <i class="bi bi-at" aria-hidden="true"></i>
+                <input type="text" id="addFriendUsernameInput" class="form-control" placeholder="Enter username"
+                  autocomplete="off">
+              </div>
+              <button type="submit" id="addFriendBtn" class="ca-friend-add-btn">
+                <i class="bi bi-person-plus-fill"></i>
+                <span>Add Friend</span>
+              </button>
+            </form>
+            <p id="addFriendStatus" class="ca-add-friend-status" aria-live="polite"></p>
+          </section>
+
+          <section id="pendingRequestsSection" class="ca-social-card">
+            <div class="ca-social-card__heading">
+              <div>
+                <span class="ca-social-card__eyebrow">INBOX</span>
+                <h3 class="ca-social-card__title">Pending Requests</h3>
+              </div>
+              <span class="ca-social-card__icon ca-social-card__icon--orange"><i
+                  class="bi bi-person-lines-fill"></i></span>
+            </div>
+            <ul id="pendingRequestsList" class="ca-pending-requests__list">
+              <li class="ca-pending-requests__empty">No pending requests.</li>
+            </ul>
+          </section>
+
+          <section id="friendsListSection" class="ca-social-card">
+            <div class="ca-social-card__heading">
+              <div>
+                <span class="ca-social-card__eyebrow">YOUR CIRCLE</span>
+                <h3 class="ca-social-card__title">My Friends</h3>
+              </div>
+              <span class="ca-social-card__icon ca-social-card__icon--green"><i class="bi bi-people-fill"></i></span>
+            </div>
+            <ul id="friendsList" class="ca-pending-requests__list ca-friends-modal-list">
+              <li class="ca-pending-requests__empty">No friends yet.</li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Match challenge popup -->
+  <div id="challengePopupOverlay" class="ca-modal-overlay" style="display:none" role="dialog" aria-modal="true">
+    <section class="ca-panel ca-challenge-popup-card">
+      <i class="bi bi-lightning-charge-fill ca-challenge-popup-icon"></i>
+      <h2 id="challengePopupTitle" class="ca-challenge-popup-title">Challenge!</h2>
+      <p id="challengePopupText" class="ca-challenge-popup-text">â€” wants to battle you.</p>
+      <div class="ca-challenge-popup-actions">
+        <button type="button" id="challengeAcceptBtn" class="ca-challenge-accept-btn">Accept</button>
+        <button type="button" id="challengeDeclineBtn" class="ca-challenge-decline-btn">Decline</button>
+      </div>
+    </section>
+  </div>
+
+</body>
+
+</html>

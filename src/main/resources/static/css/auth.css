@@ -1,0 +1,1019 @@
+/*
+   CODING ARENA — Auth UI
+   Figma reference: dark competitive coding / minimal esports
+   ========================================================= */
+
+.ca-auth-page {
+  min-height: 100vh;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0b0d14;
+  color: #dde3f0;
+}
+
+.ca-auth-shell {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  isolation: isolate;
+}
+
+.ca-auth-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  opacity: 0.8;
+  background-image:
+    linear-gradient(rgba(79, 142, 247, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 142, 247, 0.035) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.ca-auth-glow {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: -2;
+}
+
+.ca-auth-glow--primary {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(79, 142, 247, 0.055);
+}
+
+.ca-auth-glow--secondary {
+  bottom: -220px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(247, 133, 79, 0.035);
+}
+
+.ca-theme-orb {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fbbf24;
+  text-decoration: none;
+  border: 1px solid rgba(79, 142, 247, 0.16);
+  border-radius: 50%;
+  background: rgba(18, 21, 31, 0.8);
+  box-shadow: 0 0 24px rgba(79, 142, 247, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 5;
+}
+
+.ca-theme-orb:hover {
+  color: #ffd166;
+  border-color: rgba(79, 142, 247, 0.35);
+  transform: translateY(-1px);
+}
+
+.ca-auth-wrapper {
+  width: min(100%, 370px);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  z-index: 2;
+  animation: ca-auth-enter 0.45s ease-out both;
+}
+
+.ca-auth-branding {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.ca-auth-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  text-decoration: none;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.ca-auth-wordmark__text {
+  color: #dde3f0;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.ca-auth-wordmark__brace {
+  font-family: var(--font-code, 'JetBrains Mono', monospace);
+  font-size: 1.85rem;
+  font-weight: 500;
+}
+
+.ca-auth-wordmark__brace--left {
+  color: #4f8ef7;
+}
+
+.ca-auth-wordmark__brace--right {
+  color: #f7854f;
+}
+
+.ca-auth-tagline {
+  margin: 10px 0 0;
+  color: #5a6480;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.ca-auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  margin-bottom: 14px;
+  border: 1px solid #1e2436;
+  border-radius: 8px;
+  background: #12151f;
+}
+
+.ca-auth-tab {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #5a6480;
+  text-decoration: none;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.ca-auth-tab:hover {
+  color: #9aaac8;
+}
+
+.ca-auth-tab--active {
+  color: #dde3f0;
+  background: #1e2436;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+.ca-auth-card {
+  width: 100%;
+  padding: 26px 26px 24px;
+  border: 1px solid #1e2436;
+  border-radius: 12px;
+  background: rgba(18, 21, 31, 0.94);
+  box-shadow: 0 18px 45px -24px rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.ca-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.ca-auth-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.ca-auth-label {
+  margin: 0 0 8px;
+  color: #5a6480;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: 0.69rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ca-auth-input,
+.ca-auth-password-wrap .ca-auth-input {
+  width: 100%;
+  min-height: 42px;
+  margin: 0;
+  padding: 0 13px;
+  border: 1px solid #1e2436;
+  border-radius: 8px;
+  outline: none;
+  background: #0b0d14;
+  color: #dde3f0;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: 0.82rem;
+  box-shadow: none;
+}
+
+.ca-auth-input::placeholder {
+  color: #3a4060;
+}
+
+.ca-auth-input:focus {
+  border-color: rgba(79, 142, 247, 0.8);
+  box-shadow: 0 0 0 3px rgba(79, 142, 247, 0.09);
+  background: #0b0d14;
+  color: #dde3f0;
+}
+
+.ca-auth-password-wrap {
+  position: relative;
+}
+
+.ca-auth-password-wrap .ca-auth-input {
+  padding-right: 42px;
+}
+
+.ca-toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  padding: 4px;
+  border: 0;
+  background: transparent;
+  color: #5a6480;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.ca-toggle-password:hover {
+  color: #9aaac8;
+}
+
+.ca-auth-submit {
+  width: 100%;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 7px;
+  color: #fff;
+  background: #4f8ef7;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 0 18px rgba(79, 142, 247, 0.13);
+}
+
+.ca-auth-submit:hover {
+  background: #5c97f5;
+  box-shadow: 0 0 22px rgba(79, 142, 247, 0.2);
+}
+
+.ca-auth-submit:active {
+  transform: translateY(1px);
+}
+
+.ca-auth-error {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(248, 113, 113, 0.24);
+  border-radius: 8px;
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.07);
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.ca-auth-register {
+  margin: 15px 0 0;
+  text-align: center;
+  color: #5a6480;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: 0.72rem;
+}
+
+.ca-auth-link {
+  margin-left: 4px;
+  color: #4f8ef7;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.ca-auth-link:hover {
+  color: #6ba1f9;
+}
+
+@keyframes ca-auth-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .ca-auth-shell {
+    padding: 28px 16px;
+  }
+
+  .ca-auth-wrapper {
+    width: min(100%, 360px);
+  }
+
+  .ca-auth-card {
+    padding: 22px 18px 20px;
+  }
+
+  .ca-theme-orb {
+    top: 16px;
+    right: 16px;
+  }
+}
+
+/* =========================================================
+   LIGHT THEME — LOGIN / AUTH
+   ========================================================= */
+
+[data-theme="light"] .ca-auth-page {
+  background:
+    radial-gradient(circle at 50% 10%,
+      rgba(109, 179, 248, 0.22),
+      transparent 38%),
+    linear-gradient(rgba(20, 33, 61, 0.025) 1px,
+      transparent 1px),
+    linear-gradient(90deg,
+      rgba(20, 33, 61, 0.025) 1px,
+      transparent 1px),
+    #F4F9FF !important;
+
+  background-size:
+    100% 100%,
+    40px 40px,
+    40px 40px;
+
+  color: #14213D !important;
+}
+
+/* Background grid */
+[data-theme="light"] .ca-auth-grid {
+  opacity: 0.9;
+
+  background-image:
+    linear-gradient(rgba(109, 179, 248, 0.055) 1px,
+      transparent 1px),
+    linear-gradient(90deg,
+      rgba(109, 179, 248, 0.055) 1px,
+      transparent 1px);
+}
+
+/* Ambient glows */
+[data-theme="light"] .ca-auth-glow--primary {
+  background: rgba(109, 179, 248, 0.10);
+}
+
+[data-theme="light"] .ca-auth-glow--secondary {
+  background: rgba(109, 179, 248, 0.05);
+}
+
+/* =========================================================
+   THEME ORB
+   ========================================================= */
+
+[data-theme="light"] .ca-theme-orb {
+  color: #2563EB;
+  border-color: rgba(109, 179, 248, 0.32);
+  background: rgba(255, 255, 255, 0.82);
+
+  box-shadow:
+    0 6px 18px -10px rgba(37, 99, 235, 0.18),
+    0 0 18px rgba(109, 179, 248, 0.10);
+}
+
+[data-theme="light"] .ca-theme-orb:hover {
+  color: #1D4ED8;
+  border-color: rgba(109, 179, 248, 0.55);
+  background: #FFFFFF;
+}
+
+/* =========================================================
+   BRANDING
+   ========================================================= */
+
+[data-theme="light"] .ca-auth-wordmark__text {
+  color: #14213D;
+}
+
+[data-theme="light"] .ca-auth-wordmark__brace--left {
+  color: #2563EB;
+}
+
+[data-theme="light"] .ca-auth-wordmark__brace--right {
+  color: #6DB3F8;
+}
+
+[data-theme="light"] .ca-auth-tagline {
+  color: #53627A;
+}
+
+/* =========================================================
+   LOGIN / REGISTER TABS
+   ========================================================= */
+
+[data-theme="light"] .ca-auth-tabs {
+  background: rgba(179, 213, 255, 0.30);
+  border-color: rgba(109, 179, 248, 0.24);
+}
+
+[data-theme="light"] .ca-auth-tab {
+  color: #71829A;
+}
+
+[data-theme="light"] .ca-auth-tab:hover {
+  color: #2563EB;
+}
+
+[data-theme="light"] .ca-auth-tab--active {
+  color: #14213D;
+  background: #FFFFFF;
+
+  box-shadow:
+    0 3px 10px -7px rgba(37, 99, 235, 0.20);
+}
+
+/* =========================================================
+   AUTH CARD
+   ========================================================= */
+
+[data-theme="light"] .ca-auth-card {
+  background:
+    linear-gradient(145deg,
+      rgba(255, 255, 255, 0.98),
+      rgba(179, 213, 255, 0.24));
+
+  border-color: rgba(109, 179, 248, 0.32);
+
+  box-shadow:
+    0 20px 50px -24px rgba(37, 99, 235, 0.20),
+    0 0 26px rgba(109, 179, 248, 0.08);
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+[data-theme="light"] .ca-auth-label {
+  color: #53627A;
+}
+
+[data-theme="light"] .ca-auth-input,
+[data-theme="light"] .ca-auth-password-wrap .ca-auth-input {
+  background: #FFFFFF;
+  color: #14213D;
+  border-color: rgba(20, 33, 61, 0.12);
+
+  box-shadow: none;
+}
+
+[data-theme="light"] .ca-auth-input::placeholder {
+  color: #8290A5;
+}
+
+[data-theme="light"] .ca-auth-input:hover {
+  border-color: rgba(109, 179, 248, 0.38);
+}
+
+[data-theme="light"] .ca-auth-input:focus {
+  background: #FFFFFF;
+  color: #14213D;
+  border-color: #2563EB;
+
+  box-shadow:
+    0 0 0 3px rgba(109, 179, 248, 0.20);
+}
+
+[data-theme="light"] .ca-toggle-password {
+  color: #71829A;
+}
+
+[data-theme="light"] .ca-toggle-password:hover {
+  color: #2563EB;
+}
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+[data-theme="light"] .ca-auth-submit {
+  background: #2563EB;
+
+  box-shadow:
+    0 10px 24px -12px rgba(37, 99, 235, 0.32),
+    0 0 18px rgba(109, 179, 248, 0.14);
+}
+
+[data-theme="light"] .ca-auth-submit:hover {
+  background: #1D4ED8;
+
+  box-shadow:
+    0 12px 28px -12px rgba(37, 99, 235, 0.36),
+    0 0 22px rgba(109, 179, 248, 0.18);
+}
+
+/* =========================================================
+   ERROR MESSAGE
+   ========================================================= */
+
+[data-theme="light"] .ca-auth-error {
+  color: #DC2626;
+  background: rgba(220, 38, 38, 0.06);
+  border-color: rgba(220, 38, 38, 0.18);
+}
+
+/* =========================================================
+   REGISTER LINK
+   ========================================================= */
+
+[data-theme="light"] .ca-auth-register {
+  color: #71829A;
+}
+
+[data-theme="light"] .ca-auth-link {
+  color: #2563EB;
+}
+
+[data-theme="light"] .ca-auth-link:hover {
+  color: #1D4ED8;
+}
+
+/* =========================================================
+   LIGHT THEME — REGISTER PAGE REFINEMENTS
+   ========================================================= */
+
+[data-theme="light"] #registerForm {
+  gap: 16px;
+}
+
+[data-theme="light"] #registerForm .ca-auth-field {
+  margin: 0;
+}
+
+[data-theme="light"] #registerForm .ca-auth-input {
+  background: #FFFFFF !important;
+  border-color: rgba(20, 33, 61, 0.12) !important;
+  color: #14213D !important;
+}
+
+[data-theme="light"] #registerForm .ca-auth-input:hover {
+  border-color: rgba(109, 179, 248, 0.40) !important;
+}
+
+[data-theme="light"] #registerForm .ca-auth-input:focus {
+  border-color: #2563EB !important;
+  box-shadow:
+    0 0 0 3px rgba(109, 179, 248, 0.20) !important;
+}
+
+[data-theme="light"] #registerBtn {
+  background: #2563EB !important;
+  color: #FFFFFF !important;
+
+  box-shadow:
+    0 10px 24px -12px rgba(37, 99, 235, 0.30),
+    0 0 18px rgba(109, 179, 248, 0.14) !important;
+}
+
+[data-theme="light"] #registerBtn:hover {
+  background: #1D4ED8 !important;
+
+  box-shadow:
+    0 12px 28px -12px rgba(37, 99, 235, 0.36),
+    0 0 22px rgba(109, 179, 248, 0.18) !important;
+}
+
+[data-theme="light"] #registerError {
+  background: rgba(220, 38, 38, 0.06) !important;
+  border-color: rgba(220, 38, 38, 0.18) !important;
+  color: #DC2626 !important;
+}
+
+/* =========================================================
+   Checkbox & Legal Navigation Components
+   ========================================================= */
+
+.ca-auth-checkbox-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 2px 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ca-auth-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  border: 1px solid #1e2436;
+  border-radius: 4px;
+  background: #0b0d14;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.ca-auth-checkbox:checked {
+  background: #4f8ef7;
+  border-color: #4f8ef7;
+}
+
+.ca-auth-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 5px;
+  height: 9px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.ca-auth-checkbox:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 142, 247, 0.2);
+}
+
+.ca-auth-checkbox-label {
+  margin: 0;
+  color: #8e9aaf;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  cursor: pointer;
+}
+
+.ca-auth-checkbox-label a {
+  color: #4f8ef7;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ca-auth-checkbox-label a:hover {
+  color: #8bb8ff;
+}
+
+.ca-auth-footer-nav {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: 0.74rem;
+}
+
+.ca-auth-footer-link {
+  color: #5a6480;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.ca-auth-footer-link:hover {
+  color: #9aaac8;
+  text-decoration: underline;
+}
+
+.ca-auth-footer-link--active {
+  color: #9aaac8;
+  font-weight: 600;
+}
+
+.ca-auth-footer-sep {
+  color: #2b334a;
+  font-size: 0.65rem;
+}
+
+/* =========================================================
+   Legal Pages Layout (Terms & Privacy) — Fully Responsive
+   ========================================================= */
+
+body.ca-legal-page {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  min-height: 100vh;
+  height: auto;
+  display: block !important;
+  background: #0b0d14;
+}
+
+.ca-legal-page .ca-legal-shell {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 48px 20px 60px;
+  box-sizing: border-box;
+}
+
+.ca-legal-page .ca-theme-orb {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+.ca-legal-wrapper {
+  width: min(100%, 780px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  animation: ca-auth-enter 0.45s ease-out both;
+}
+
+.ca-legal-card {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 36px 36px 32px;
+  background: rgba(18, 21, 31, 0.96);
+  border: 1px solid #1e2436;
+  border-radius: 12px;
+  box-shadow: 0 18px 45px -24px rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.ca-legal-header {
+  border-bottom: 1px solid #1e2436;
+  padding-bottom: 18px;
+  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ca-legal-title {
+  margin: 0;
+  color: #dde3f0;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: clamp(1.35rem, 4vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.ca-legal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  font-family: var(--font-code, 'JetBrains Mono', monospace);
+  font-size: clamp(0.7rem, 2vw, 0.78rem);
+  font-weight: 500;
+  flex-wrap: wrap;
+}
+
+.ca-legal-lead {
+  color: #dde3f0;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: clamp(0.88rem, 2.2vw, 0.95rem);
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.ca-legal-section {
+  margin-top: 22px;
+}
+
+.ca-legal-section h2 {
+  color: #dde3f0;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  font-weight: 600;
+  margin: 0 0 10px;
+  line-height: 1.35;
+}
+
+.ca-legal-section p {
+  color: #9aaac8;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: clamp(0.82rem, 2vw, 0.88rem);
+  line-height: 1.65;
+  margin: 0 0 12px;
+}
+
+.ca-legal-section ul {
+  margin: 0 0 14px;
+  padding-left: 20px;
+  color: #9aaac8;
+  font-family: var(--font-ui, 'Outfit', sans-serif);
+  font-size: clamp(0.82rem, 2vw, 0.88rem);
+  line-height: 1.65;
+}
+
+.ca-legal-section li {
+  margin-bottom: 6px;
+}
+
+.ca-legal-section strong {
+  color: #dde3f0;
+}
+
+.ca-legal-section a,
+.ca-legal-content a {
+  color: #4f8ef7;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  word-break: break-all;
+}
+
+.ca-legal-section a:hover,
+.ca-legal-content a:hover {
+  color: #8bb8ff;
+}
+
+.ca-legal-actions {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #1e2436;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.ca-legal-back-btn {
+  width: auto;
+  min-width: 180px;
+  gap: 8px;
+  text-decoration: none;
+}
+
+/* =========================================================
+   Responsive Breakpoints for Legal Pages
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+  .ca-legal-page .ca-legal-shell {
+    padding: 36px 16px 48px;
+  }
+
+  .ca-legal-card {
+    padding: 26px 20px 24px;
+    border-radius: 10px;
+  }
+
+  .ca-legal-header {
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+  }
+
+  .ca-legal-section {
+    margin-top: 18px;
+  }
+
+  .ca-legal-actions {
+    margin-top: 24px;
+    padding-top: 18px;
+  }
+
+  .ca-legal-back-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .ca-legal-page .ca-legal-shell {
+    padding: 28px 12px 40px;
+  }
+
+  .ca-legal-page .ca-theme-orb {
+    top: 14px;
+    right: 14px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .ca-auth-branding {
+    margin-bottom: 24px;
+  }
+
+  .ca-legal-card {
+    padding: 20px 14px 18px;
+    border-radius: 8px;
+  }
+
+  .ca-legal-section ul {
+    padding-left: 18px;
+  }
+
+  .ca-auth-footer-nav {
+    margin-top: 18px;
+    gap: 6px;
+    font-size: 0.72rem;
+  }
+}
+
+/* =========================================================
+   Light Theme Overrides for Legal & Checkbox
+   ========================================================= */
+
+body.ca-legal-page[data-theme="light"],
+[data-theme="light"] body.ca-legal-page,
+[data-theme="light"].ca-legal-page {
+  background: #F4F9FF !important;
+  color: #14213D !important;
+}
+
+[data-theme="light"] .ca-legal-card {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(109, 179, 248, 0.32) !important;
+  box-shadow: 0 18px 45px -24px rgba(37, 99, 235, 0.18) !important;
+}
+
+[data-theme="light"] .ca-legal-header,
+[data-theme="light"] .ca-legal-actions {
+  border-color: rgba(20, 33, 61, 0.08) !important;
+}
+
+[data-theme="light"] .ca-legal-title,
+[data-theme="light"] .ca-legal-lead,
+[data-theme="light"] .ca-legal-section h2,
+[data-theme="light"] .ca-legal-section strong {
+  color: #14213D !important;
+}
+
+[data-theme="light"] .ca-legal-badge {
+  color: #64748b !important;
+}
+
+[data-theme="light"] .ca-legal-section p,
+[data-theme="light"] .ca-legal-section ul,
+[data-theme="light"] .ca-legal-section li {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .ca-legal-section a,
+[data-theme="light"] .ca-legal-content a {
+  color: #2563EB !important;
+}
+
+[data-theme="light"] .ca-legal-section a:hover,
+[data-theme="light"] .ca-legal-content a:hover {
+  color: #1D4ED8 !important;
+}
+
+[data-theme="light"] .ca-auth-checkbox {
+  background: #f8fafc !important;
+  border-color: rgba(20, 33, 61, 0.18) !important;
+}
+
+[data-theme="light"] .ca-auth-checkbox:checked {
+  background: #2563EB !important;
+  border-color: #2563EB !important;
+}
+
+[data-theme="light"] .ca-auth-checkbox-label {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .ca-auth-footer-link {
+  color: #64748b !important;
+}
+
+[data-theme="light"] .ca-auth-footer-link:hover,
+[data-theme="light"] .ca-auth-footer-link--active {
+  color: #14213D !important;
+}
+
+[data-theme="light"] .ca-auth-footer-sep {
+  color: #cbd5e1 !important;
+}

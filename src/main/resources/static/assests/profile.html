@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codess &bull; Profile</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <script src="../js/theme.js"></script>
+
+</head>
+
+<body class="ca-body">
+
+    <div class="ca-board"></div>
+
+    <div class="container ca-viewport">
+
+        <!-- Header -->
+        <header class="ca-profile-header mb-4">
+            <a href="index.html" class="ca-wordmark text-decoration-none">
+                <span class="ca-wordmark__coding">CODING</span>
+                <span class="ca-wordmark__arena">ARENA</span>
+            </a>
+
+            <div class="ca-avatar-pill">
+                <img id="headerAvatar" class="ca-avatar-pill__img" src="characters/character-01.png" alt="">
+                <span id="headerUsername">â€”</span>
+            </div>
+        </header>
+
+        <div class="row g-4">
+
+            <!-- LEFT -->
+            <div class="col-lg-4">
+
+                <div class="ca-panel text-center">
+
+                    <img id="profileAvatar" class="ca-profile-avatar" src="characters/character-01.png" alt="Avatar">
+
+                    <h2 id="profileUsername" class="ca-profile-name mt-3">â€”</h2>
+
+                    <button class="ca-menu-btn w-100 mt-3" data-bs-toggle="modal" data-bs-target="#editProfileModal"
+                        id="openEditProfileBtn">
+                        <i class="bi bi-pencil-fill"></i>
+                        Edit Profile
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="col-lg-8">
+
+                <!-- Stats -->
+                <div class="ca-panel mb-4">
+
+                    <h3 class="ca-panel__title">Player Statistics</h3>
+
+                    <div class="row g-3">
+
+                        <div class="col-6 col-md-4">
+                            <div class="ca-stat-box">
+                                <small>Rating</small>
+                                <h4 id="userRatingValue">â€”</h4>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-md-4">
+                            <div class="ca-stat-box">
+                                <small>Wins</small>
+                                <h4 id="userWinsValue">â€”</h4>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-md-4">
+                            <div class="ca-stat-box">
+                                <small>Losses</small>
+                                <h4 id="userLossesValue">â€”</h4>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-md-6">
+                            <div class="ca-stat-box">
+                                <small>Win Rate</small>
+                                <h4 id="userWinRateValue">â€”</h4>
+                            </div>
+                        </div>
+
+                        <div class="col-6 col-md-6">
+                            <div class="ca-stat-box">
+                                <small>Joined</small>
+                                <h4 id="userJoinDate">â€”</h4>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Match History -->
+                <div class="ca-panel">
+
+                    <h3 class="ca-panel__title">Recent Matches</h3>
+
+                    <ul class="ca-matches-list" id="recentMatchesList">
+
+                        <li class="ca-match-row ca-match-row--placeholder">
+                            No match history
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="index.html" class="ca-play-btn" id="backDashboardBtn">
+                <i class="bi bi-arrow-left-circle-fill"></i>
+                Back to Dashboard
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content ca-modal">
+
+                <div class="modal-header border-0">
+
+                    <h5 class="modal-title">Edit Profile</h5>
+
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <form id="editProfileForm">
+
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" id="editUsernameInput" class="form-control">
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label mb-0">Choose Your Character</label>
+
+                                <span id="selectedCharacterLabel" class="ca-character-selected-label">
+                                    Character 01
+                                </span>
+                            </div>
+
+                            <div id="characterPicker" class="ca-character-picker">
+
+                                <button type="button" class="ca-character-option" data-character="01"
+                                    aria-label="Choose character 01">
+
+                                    <img src="characters/character-01.png" alt="Character 01">
+
+                                    <span>01</span>
+                                </button>
+
+                                <button type="button" class="ca-character-option" data-character="02"
+                                    aria-label="Choose character 02">
+
+                                    <img src="characters/character-02.png" alt="Character 02">
+
+                                    <span>02</span>
+                                </button>
+
+                                <button type="button" class="ca-character-option" data-character="03"
+                                    aria-label="Choose character 03">
+
+                                    <img src="characters/character-03.png" alt="Character 03">
+
+                                    <span>03</span>
+                                </button>
+
+                                <button type="button" class="ca-character-option" data-character="04"
+                                    aria-label="Choose character 04">
+
+                                    <img src="characters/character-04.png" alt="Character 04">
+
+                                    <span>04</span>
+                                </button>
+
+                                <button type="button" class="ca-character-option" data-character="05"
+                                    aria-label="Choose character 05">
+
+                                    <img src="characters/character-05.png" alt="Character 05">
+
+                                    <span>05</span>
+                                </button>
+
+                                <button type="button" class="ca-character-option" data-character="06"
+                                    aria-label="Choose character 06">
+
+                                    <img src="characters/character-06.png" alt="Character 06">
+
+                                    <span>06</span>
+                                </button>
+
+                                <button type="button" class="ca-character-option" data-character="07"
+                                    aria-label="Choose character 07">
+
+                                    <img src="characters/character-07.png" alt="Character 07">
+
+                                    <span>07</span>
+                                </button>
+
+                                <button type="button" class="ca-character-option" data-character="08"
+                                    aria-label="Choose character 08">
+
+                                    <img src="characters/character-08.png" alt="Character 08">
+
+                                    <span>08</span>
+                                </button>
+
+                            </div>
+
+                            <!-- Hidden field keeps the existing backend contract -->
+                            <input type="hidden" id="editAvatarSeedInput">
+                        </div>
+
+                        <button type="submit" class="ca-play-btn w-100" id="saveProfileBtn">
+                            Save Changes
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/websocket.js"></script>
+    <script src="../js/profile.js"></script>
+</body>
+
+</html>

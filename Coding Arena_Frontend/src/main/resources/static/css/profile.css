@@ -1,0 +1,87 @@
+﻿/* =========================================================
+   CODING ARENA — Profile Design (Figma Redesign)
+   ========================================================= */
+
+.ca-profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ca-profile-avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--bg-editor);
+  border: 2px solid var(--primary);
+  padding: 4px;
+  box-shadow: var(--shadow-glow-primary);
+}
+
+.ca-profile-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 16px 0;
+  color: var(--text-main);
+}
+
+.ca-stat-box {
+  background: rgba(0, 0, 0, 0.2);
+  border: var(--border-main);
+  border-radius: var(--radius-btn);
+  padding: 16px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.ca-stat-box:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ca-stat-box h4 {
+  font-family: var(--font-code);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0 0 8px;
+}
+
+.ca-stat-box span {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ca-modal {
+  background: var(--bg-surface);
+  border: var(--border-main);
+  border-radius: var(--radius-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-depth);
+  color: var(--text-main);
+}
+
+.ca-modal .modal-header {
+  border-bottom: var(--border-subtle);
+  padding: 20px 24px;
+}
+
+.ca-modal .modal-title {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.ca-modal .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+  opacity: 0.5;
+}
+
+.ca-modal .btn-close:hover {
+  opacity: 1;
+}
+
+.ca-modal .modal-body {
+  padding: 24px;
+}

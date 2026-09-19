@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Codess &bull; Settings</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/settings.css">
+    <script src="../js/theme.js"></script>
+
+</head>
+
+<body class="ca-body">
+
+    <div class="ca-board"></div>
+
+    <div class="container ca-viewport">
+
+        <header class="ca-profile-header mb-4">
+
+            <a href="index.html" class="ca-wordmark text-decoration-none">
+
+                <span class="ca-wordmark__coding">CODING</span>
+                <span class="ca-wordmark__arena">ARENA</span>
+
+            </a>
+
+            <div class="ca-avatar-pill">
+                <img id="settingsAvatar" class="ca-avatar-pill__img" src="characters/character-01.png">
+                <span id="settingsUsername">â€”</span>
+            </div>
+
+        </header>
+
+        <!-- Account -->
+
+        <section class="ca-panel mb-4">
+
+            <h3 class="ca-panel__title">
+                <i class="bi bi-person-circle"></i>
+                Account
+            </h3>
+
+            <form id="changeEmailForm">
+
+                <label class="form-label">Email Address</label>
+                <input type="email" id="emailInput" class="form-control mb-3" placeholder="Enter new email">
+
+                <label class="form-label">Confirm Password</label>
+                <input type="password" id="emailChangePasswordInput" class="form-control mb-3"
+                    placeholder="Enter your password">
+
+                <button class="ca-play-btn" id="changeEmailBtn" type="submit">
+                    Update Email
+                </button>
+
+            </form>
+
+            <hr>
+
+            <form id="changePasswordForm">
+
+                <label class="form-label">Current Password</label>
+
+                <input type="password" id="currentPasswordInput" class="form-control mb-3">
+
+                <label class="form-label">New Password</label>
+
+                <input type="password" id="newPasswordInput" class="form-control mb-3">
+
+                <label class="form-label">Confirm Password</label>
+
+                <input type="password" id="confirmPasswordInput" class="form-control mb-3">
+
+                <button class="ca-play-btn" id="changePasswordBtn" type="submit">
+                    Change Password
+                </button>
+
+            </form>
+
+        </section>
+
+        <!-- Preferences -->
+
+        <section class="ca-panel mb-4">
+
+            <h3 class="ca-panel__title">
+                <i class="bi bi-sliders"></i>
+                Preferences
+            </h3>
+
+            <div class="ca-toggle-row">
+
+                <div>
+                    <strong>Dark Theme</strong>
+                    <p>Use dark editor &amp; UI</p>
+                </div>
+
+                <div class="form-check form-switch">
+
+                    <input class="form-check-input" type="checkbox" id="darkThemeToggle">
+
+                </div>
+            </div>
+
+            <div class="ca-toggle-row">
+
+                <div>
+                    <strong>Match Notifications</strong>
+                    <p>Queue, invite &amp; results</p>
+                </div>
+
+                <div class="form-check form-switch">
+
+                    <input class="form-check-input" type="checkbox" id="notificationToggle">
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Danger -->
+
+        <section class="ca-panel ca-danger-panel">
+
+            <h3 class="ca-panel__title text-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                Danger Zone
+            </h3>
+
+            <div class="d-grid gap-3">
+
+                <button class="ca-danger-btn" id="logoutBtn">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Log Out
+                </button>
+
+                <button class="ca-delete-btn" id="deleteAccountBtn">
+                    <i class="bi bi-trash-fill"></i>
+                    Delete Account
+                </button>
+
+            </div>
+
+        </section>
+
+        <div class="text-center mt-5">
+
+            <a href="index.html" class="ca-play-btn" id="backDashboardBtn">
+
+                <i class="bi bi-arrow-left-circle-fill"></i>
+                Back to Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/websocket.js"></script>
+    <script src="../js/settings.js"></script>
+
+</body>
+
+</html>

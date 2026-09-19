@@ -1,0 +1,198 @@
+﻿/* =========================================================
+   CODING ARENA — Settings Design (Figma Redesign)
+   ========================================================= */
+
+.ca-toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border: var(--border-main);
+  border-radius: var(--radius-btn);
+  margin-bottom: 12px;
+}
+
+.ca-toggle-row strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.ca-toggle-row p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.ca-danger-panel {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.ca-danger-btn,
+.ca-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.ca-danger-btn {
+  background: transparent;
+  color: var(--text-main);
+  border: var(--border-main);
+}
+
+.ca-danger-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ca-delete-btn {
+  background: var(--error);
+  color: #fff;
+  border: none;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+}
+
+.ca-delete-btn:hover {
+  background: #dc2626;
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
+}
+
+.ca-form-status {
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  padding: 10px;
+  border-radius: var(--radius-btn);
+  text-align: center;
+}
+
+.ca-form-status--success {
+  background: var(--success-bg);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.ca-form-status--error {
+  background: var(--error-bg);
+  color: var(--error);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* =========================================================
+   LIGHT THEME — SETTINGS PAGE
+   ========================================================= */
+
+[data-theme="light"] .ca-toggle-row {
+  background:
+    linear-gradient(135deg,
+      rgba(179, 213, 255, 0.30),
+      rgba(255, 255, 255, 0.86)) !important;
+
+  border-color: rgba(109, 179, 248, 0.30) !important;
+
+  box-shadow:
+    0 5px 16px -12px rgba(37, 99, 235, 0.12);
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+[data-theme="light"] .ca-toggle-row:hover {
+  background:
+    linear-gradient(135deg,
+      rgba(179, 213, 255, 0.44),
+      rgba(255, 255, 255, 0.92)) !important;
+
+  border-color: rgba(109, 179, 248, 0.45) !important;
+
+  box-shadow:
+    0 8px 20px -12px rgba(37, 99, 235, 0.18);
+
+  transform: translateY(-1px);
+}
+
+[data-theme="light"] .ca-toggle-row strong {
+  color: #14213D !important;
+}
+
+[data-theme="light"] .ca-toggle-row p {
+  color: #53627A !important;
+}
+
+/* Theme / notification switch */
+[data-theme="light"] .form-check-input {
+  background-color: #DCEEFF;
+  border-color: rgba(109, 179, 248, 0.45);
+}
+
+[data-theme="light"] .form-check-input:checked {
+  background-color: #2563EB;
+  border-color: #2563EB;
+  box-shadow:
+    0 0 0 3px rgba(109, 179, 248, 0.18);
+}
+
+/* Danger zone */
+[data-theme="light"] .ca-danger-panel {
+  background:
+    linear-gradient(135deg,
+      rgba(255, 247, 247, 0.96),
+      rgba(255, 255, 255, 0.94)) !important;
+
+  border-color: rgba(220, 38, 38, 0.18) !important;
+
+  box-shadow:
+    0 8px 24px -12px rgba(220, 38, 38, 0.10);
+}
+
+[data-theme="light"] .ca-danger-panel .ca-panel__title {
+  color: #DC2626 !important;
+}
+
+[data-theme="light"] .ca-danger-btn {
+  background: #FFFFFF !important;
+  color: #14213D !important;
+  border-color: rgba(20, 33, 61, 0.12) !important;
+}
+
+[data-theme="light"] .ca-danger-btn:hover {
+  background: #EEF6FF !important;
+  border-color: rgba(109, 179, 248, 0.40) !important;
+  color: #2563EB !important;
+}
+
+[data-theme="light"] .ca-delete-btn {
+  box-shadow:
+    0 8px 20px -10px rgba(220, 38, 38, 0.28);
+}
+
+[data-theme="light"] .ca-delete-btn:hover {
+  box-shadow:
+    0 12px 24px -10px rgba(220, 38, 38, 0.34);
+}
+
+/* Form status messages */
+[data-theme="light"] .ca-form-status--success {
+  background: rgba(5, 150, 105, 0.08);
+  border-color: rgba(5, 150, 105, 0.22);
+}
+
+[data-theme="light"] .ca-form-status--error {
+  background: rgba(220, 38, 38, 0.07);
+  border-color: rgba(220, 38, 38, 0.20);
+}

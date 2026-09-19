@@ -1,0 +1,5 @@
+run.ps1
+target/
+*.class
+.idea/
+*.iml

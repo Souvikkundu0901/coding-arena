@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Codess Privacy Policy.">
+    <title>Codess | Privacy Policy</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <script src="../js/theme.js"></script>
+</head>
+
+<body class="ca-auth-page ca-legal-page">
+    <main class="ca-auth-shell ca-legal-shell">
+        <div class="ca-auth-grid" aria-hidden="true"></div>
+        <div class="ca-auth-glow ca-auth-glow--primary" aria-hidden="true"></div>
+        <div class="ca-auth-glow ca-auth-glow--secondary" aria-hidden="true"></div>
+
+        <button type="button" class="ca-theme-orb" aria-label="Switch theme" title="Switch theme">
+            <i class="bi bi-sun-fill" aria-hidden="true"></i>
+        </button>
+
+        <div class="ca-legal-wrapper">
+            <header class="ca-auth-branding">
+                <a href="index.html" class="ca-auth-wordmark" aria-label="Codess home">
+                    <span class="ca-auth-wordmark__brace ca-auth-wordmark__brace--left">{</span>
+                    <span class="ca-auth-wordmark__text">Codess</span>
+                    <span class="ca-auth-wordmark__brace ca-auth-wordmark__brace--right">}</span>
+                </a>
+                <p class="ca-auth-tagline">Competitive coding. One match at a time.</p>
+            </header>
+
+            <article class="ca-auth-card ca-legal-card">
+                <div class="ca-legal-header">
+                    <h1 class="ca-legal-title">Privacy Policy</h1>
+                    <div class="ca-legal-badge">
+                        <i class="bi bi-shield-lock-fill" aria-hidden="true"></i>
+                        <span>Last updated: September 12, 2026</span>
+                    </div>
+                </div>
+
+                <div class="ca-legal-content">
+                    <p class="ca-legal-lead">
+                        This policy explains what data Codess collects and how it is used.
+                    </p>
+
+                    <section class="ca-legal-section">
+                        <h2>1. What We Collect</h2>
+                        <ul>
+                            <li><strong>Account information</strong>: username, email address, and a securely hashed password (we never store your password in plain text).</li>
+                            <li><strong>Gameplay data</strong>: match history, submitted code, submission verdicts, ratings, wins/losses, and match timestamps.</li>
+                            <li><strong>Social data</strong>: friend requests/connections and direct challenges you send or receive, if you use those features.</li>
+                            <li><strong>Preferences</strong>: theme and notification settings, if you set them.</li>
+                        </ul>
+                        <p>
+                            We do not collect payment information, government ID numbers, or precise location data. This platform does not use third-party advertising trackers.
+                        </p>
+                    </section>
+
+                    <section class="ca-legal-section">
+                        <h2>2. How We Use Your Data</h2>
+                        <ul>
+                            <li>To operate your account (login, authentication via secure tokens).</li>
+                            <li>To run matchmaking and pair you with opponents of similar rating.</li>
+                            <li>To send your submitted code to our code-execution provider (Judge0 via RapidAPI) so it can be run and judged.</li>
+                            <li>To calculate and display ratings, match history, and leaderboards where applicable.</li>
+                            <li>To let you connect with friends and send/receive match challenges.</li>
+                        </ul>
+                    </section>
+
+                    <section class="ca-legal-section">
+                        <h2>3. Third-Party Services</h2>
+                        <p>
+                            Your submitted code is sent to <strong>Judge0 (via RapidAPI)</strong> to be executed and evaluated. This is necessary for the platform's core function of judging submissions. We do not send your email, password, or other account details to this service &mdash; only the code, language, and problem input/output needed to produce a verdict.
+                        </p>
+                        <p>
+                            Your account data (email, password hash, match data) is stored using <strong>Supabase</strong> (PostgreSQL) and <strong>Upstash</strong> (Redis, used only for matchmaking queue state, not persistent storage).
+                        </p>
+                    </section>
+
+                    <section class="ca-legal-section">
+                        <h2>4. Data Retention</h2>
+                        <ul>
+                            <li>Account data is retained as long as your account exists.</li>
+                            <li>If you delete your account, it is deactivated and can no longer be used to log in; match history involving you may be retained in anonymized or reduced form to preserve the integrity of other players' match records, but your account is no longer active or accessible.</li>
+                        </ul>
+                    </section>
+
+                    <section class="ca-legal-section">
+                        <h2>5. Your Rights</h2>
+                        <ul>
+                            <li>You can update your username, email, and password from account settings.</li>
+                            <li>You can delete your account at any time, which requires confirming your password.</li>
+                            <li>You can request more detail about what data we hold by contacting us directly.</li>
+                        </ul>
+                    </section>
+
+                    <section class="ca-legal-section">
+                        <h2>6. Security</h2>
+                        <p>
+                            Passwords are hashed using industry-standard hashing (BCrypt) and are never stored or transmitted in plain text. Authentication uses short-lived signed tokens (JWT). While we take reasonable measures to protect your data, no system can guarantee absolute security, especially during active development of a student project.
+                        </p>
+                    </section>
+
+                    <section class="ca-legal-section">
+                        <h2>7. Changes to This Policy</h2>
+                        <p>
+                            This policy may be updated as the project develops. Material changes will be reflected by updating the "last updated" date above.
+                        </p>
+                    </section>
+
+                    <section class="ca-legal-section">
+                        <h2>8. Contact</h2>
+                        <p>
+                            Questions about this policy can be directed to <a href="mailto:kundusouvik54@gmail.com" class="ca-auth-link">kundusouvik54@gmail.com</a>.
+                        </p>
+                    </section>
+                </div>
+
+                <div class="ca-legal-actions">
+                    <a href="register.html" class="ca-auth-submit ca-legal-back-btn">
+                        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                        <span>Back to Registration</span>
+                    </a>
+                </div>
+            </article>
+
+            <footer class="ca-auth-footer-nav">
+                <a href="terms.html" class="ca-auth-footer-link">Terms &amp; Conditions</a>
+                <span class="ca-auth-footer-sep">&bull;</span>
+                <a href="privacy.html" class="ca-auth-footer-link ca-auth-footer-link--active">Privacy Policy</a>
+                <span class="ca-auth-footer-sep">&bull;</span>
+                <a href="login.html" class="ca-auth-footer-link">Sign In</a>
+            </footer>
+        </div>
+    </main>
+</body>
+
+</html>

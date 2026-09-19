@@ -1,0 +1,631 @@
+﻿/* =========================================================
+   CODING ARENA — Practice Solve
+   ========================================================= */
+
+.ca-solve-main {
+  width: min(1380px, 100%);
+  margin: 0 auto;
+  padding: 24px 20px 34px;
+}
+
+.ca-solve-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.ca-solve-helper {
+  margin: 6px 0 0;
+  color: var(--text-secondary);
+  font-size: .83rem;
+}
+
+.ca-solve-live-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, .20);
+  background: rgba(16, 185, 129, .07);
+  border-radius: 999px;
+  padding: 7px 10px;
+  font-size: .7rem;
+  font-weight: 700;
+}
+
+.ca-solve-live-chip span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 12px rgba(16, 185, 129, .65);
+}
+
+.ca-solve-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, .86fr) minmax(420px, 1.34fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.ca-solve-problem-panel,
+.ca-solve-editor-panel {
+  min-height: calc(100vh - 150px);
+}
+
+.ca-solve-problem-panel {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.ca-solve-editor-panel {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ca-solve-problem-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
+.ca-solve-problem-title {
+  margin: 4px 0 0;
+  font-size: 1.55rem;
+  font-weight: 750;
+  line-height: 1.12;
+  letter-spacing: -.025em;
+  color: var(--text-main);
+}
+
+.ca-solve-tags {
+  margin-bottom: 20px;
+}
+
+.ca-solve-copy-label {
+  margin-bottom: 8px;
+}
+
+.ca-solve-problem-description {
+  margin: 0 0 22px;
+  color: var(--text-secondary);
+  font-size: .9rem;
+  line-height: 1.72;
+}
+
+.ca-solve-examples-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: var(--text-main);
+  font-size: .82rem;
+  font-weight: 650;
+}
+
+.ca-solve-examples-heading i {
+  color: var(--primary);
+}
+
+.ca-solve-code-block {
+  min-height: 120px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 10px;
+  background: var(--bg-editor);
+  color: #b8c4d8;
+  font-family: var(--font-code);
+  font-size: .76rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.ca-solve-editor-toolbar {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, .07);
+  background: rgba(255, 255, 255, .018);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ca-solve-editor-title {
+  margin-top: 4px;
+  color: var(--text-main);
+  font-size: .85rem;
+  font-weight: 650;
+}
+
+.ca-solve-language-wrap {
+  min-width: 170px;
+}
+
+.ca-solve-language-wrap .ca-filter-label {
+  text-align: right;
+}
+
+.ca-solve-lang-select {
+  width: 100%;
+  min-width: 0;
+}
+
+.ca-solve-editor-body {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  flex: 1 1 auto;
+  overflow: hidden;
+  background: var(--bg-editor);
+}
+
+.ca-solve-editor-body .CodeMirror {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0;
+  background: var(--bg-editor);
+  color: #dce5f3;
+  font-family: var(--font-code);
+  font-size: 13px;
+  line-height: 1.72;
+}
+
+.ca-solve-editor-body .CodeMirror-scroll {
+  width: 100%;
+  min-width: 0;
+  overflow: auto !important;
+}
+
+.ca-solve-editor-body .CodeMirror-gutters {
+  background: #090d17;
+  border-right: 1px solid rgba(255, 255, 255, .055);
+}
+
+.ca-solve-editor-body .CodeMirror-linenumber {
+  color: #4b5a73;
+  padding: 0 10px 0 8px;
+}
+
+.ca-solve-editor-body .CodeMirror-cursor {
+  border-left-color: #8fb7ff;
+}
+
+.ca-solve-editor-body .CodeMirror-selected {
+  background: rgba(79, 142, 247, .22) !important;
+}
+
+.ca-solve-editor-body .CodeMirror-focused {
+  outline: none;
+}
+
+.ca-solve-textarea {
+  width: 100%;
+  min-height: 420px;
+  height: 100%;
+  resize: none;
+  border: 0;
+  outline: none;
+  border-radius: 0;
+  padding: 16px 18px;
+  background: transparent;
+  color: #dce5f3;
+  font: 13px/1.72 var(--font-code);
+  tab-size: 2;
+}
+
+.ca-solve-textarea::selection {
+  background: rgba(79, 142, 247, .22);
+}
+
+.ca-solve-editor-footer {
+  padding: 12px 14px;
+  border-top: 1px solid rgba(255, 255, 255, .07);
+  background: rgba(8, 12, 20, .86);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.ca-solve-submit-hint {
+  color: var(--text-muted);
+  font-size: .72rem;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ca-solve-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-btn);
+  color: #fff;
+  background: var(--primary);
+  font-family: var(--font-ui);
+  font-size: .78rem;
+  font-weight: 750;
+  box-shadow: var(--shadow-glow-primary);
+  transition: .18s ease;
+}
+
+.ca-solve-submit-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.ca-solve-submit-btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ca-solve-verdict {
+  margin: 10px 14px 14px;
+  min-height: 42px;
+  padding: 11px 14px;
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, .02);
+  color: var(--text-secondary);
+  font: 700 .76rem var(--font-code);
+  text-align: center;
+}
+
+.ca-solve-verdict--accepted {
+  color: var(--success);
+  background: var(--success-bg);
+  border-color: rgba(16, 185, 129, .26);
+}
+
+.ca-solve-verdict--pending {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, .03);
+}
+
+.ca-solve-verdict--wrong {
+  color: var(--error);
+  background: var(--error-bg);
+  border-color: rgba(239, 68, 68, .25);
+}
+
+@media (max-width: 980px) {
+  .ca-solve-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ca-solve-problem-panel,
+  .ca-solve-editor-panel {
+    min-height: auto;
+  }
+
+  .ca-solve-problem-panel {
+    max-height: none;
+  }
+
+  .ca-solve-editor-panel {
+    min-height: 70vh;
+  }
+}
+
+@media (max-width: 640px) {
+  .ca-solve-main {
+    padding: 18px 12px 22px;
+  }
+
+  .ca-solve-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .ca-solve-editor-toolbar,
+  .ca-solve-editor-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .ca-solve-language-wrap {
+    width: 100%;
+  }
+
+  .ca-solve-language-wrap .ca-filter-label {
+    text-align: left;
+  }
+
+  .ca-solve-submit-btn {
+    width: 100%;
+  }
+
+  .ca-solve-submit-hint {
+    display: none;
+  }
+}
+
+/* =========================================================
+   LIGHT THEME — PRACTICE SOLVE
+   ========================================================= */
+
+[data-theme="light"] .ca-solve-header {
+  color: #14213D;
+}
+
+[data-theme="light"] .ca-solve-helper {
+  color: #53627A !important;
+}
+
+/* Practice mode chip */
+[data-theme="light"] .ca-solve-live-chip {
+  background: rgba(5, 150, 105, 0.08) !important;
+  border-color: rgba(5, 150, 105, 0.18) !important;
+}
+
+/* =========================================================
+   PROBLEM PANEL
+   ========================================================= */
+
+[data-theme="light"] .ca-solve-problem-panel {
+  background:
+    linear-gradient(145deg,
+      rgba(255, 255, 255, 0.98),
+      rgba(244, 249, 255, 0.94)) !important;
+
+  border-color: rgba(109, 179, 248, 0.32) !important;
+
+  box-shadow:
+    0 12px 30px -14px rgba(37, 99, 235, 0.14) !important;
+}
+
+[data-theme="light"] .ca-solve-problem-title {
+  color: #14213D !important;
+}
+
+[data-theme="light"] .ca-solve-copy-label,
+[data-theme="light"] .ca-solve-panel-kicker {
+  color: #6DB3F8 !important;
+}
+
+[data-theme="light"] .ca-solve-problem-description {
+  color: #53627A !important;
+}
+
+[data-theme="light"] .ca-solve-examples-heading {
+  color: #14213D !important;
+}
+
+[data-theme="light"] .ca-solve-examples-heading i {
+  color: #2563EB !important;
+}
+
+[data-theme="light"] .ca-solve-code-block {
+  background:
+    linear-gradient(145deg,
+      rgba(179, 213, 255, 0.26),
+      rgba(255, 255, 255, 0.90)) !important;
+
+  border-color: rgba(109, 179, 248, 0.25) !important;
+  color: #14213D !important;
+}
+
+/* =========================================================
+   EDITOR PANEL
+   ========================================================= */
+
+[data-theme="light"] .ca-solve-editor-panel {
+  background: #FFFFFF !important;
+  border-color: rgba(109, 179, 248, 0.32) !important;
+
+  box-shadow:
+    0 12px 30px -14px rgba(37, 99, 235, 0.14) !important;
+}
+
+[data-theme="light"] .ca-solve-editor-toolbar {
+  background:
+    linear-gradient(135deg,
+      rgba(179, 213, 255, 0.28),
+      rgba(255, 255, 255, 0.94)) !important;
+
+  border-bottom-color: rgba(20, 33, 61, 0.08) !important;
+}
+
+[data-theme="light"] .ca-solve-editor-title {
+  color: #14213D !important;
+}
+
+[data-theme="light"] .ca-solve-language-wrap .ca-filter-label {
+  color: #53627A !important;
+}
+
+/* Language select */
+[data-theme="light"] .ca-solve-lang-select {
+  background-color: #FFFFFF !important;
+  border-color: rgba(109, 179, 248, 0.32) !important;
+  color: #14213D !important;
+}
+
+[data-theme="light"] .ca-solve-lang-select:focus {
+  border-color: #2563EB !important;
+
+  box-shadow:
+    0 0 0 3px rgba(109, 179, 248, 0.20) !important;
+}
+
+/* =========================================================
+   CODEMIRROR — LIGHT PRESENTATION
+   ========================================================= */
+
+[data-theme="light"] .ca-solve-editor-body {
+  background: #F8FBFF !important;
+}
+
+[data-theme="light"] .ca-solve-editor-body .CodeMirror {
+  background: #F8FBFF !important;
+  color: #14213D !important;
+  caret-color: #2563EB !important;
+}
+
+/* Editor gutter */
+[data-theme="light"] .ca-solve-editor-body .CodeMirror-gutters {
+  background: #EDF6FF !important;
+  border-right-color: rgba(109, 179, 248, 0.22) !important;
+}
+
+[data-theme="light"] .ca-solve-editor-body .CodeMirror-linenumber {
+  color: #71829A !important;
+}
+
+/* Cursor */
+[data-theme="light"] .ca-solve-editor-body .CodeMirror-cursor {
+  border-left-color: #2563EB !important;
+}
+
+/* Selected code */
+[data-theme="light"] .ca-solve-editor-body .CodeMirror-selected {
+  background: rgba(109, 179, 248, 0.25) !important;
+}
+
+/* Active line */
+[data-theme="light"] .ca-solve-editor-body .CodeMirror-activeline-background {
+  background: rgba(179, 213, 255, 0.16) !important;
+}
+
+/* =========================================================
+   CODEMIRROR SYNTAX COLORS
+   ========================================================= */
+
+[data-theme="light"] .cm-s-base16-dark .cm-keyword {
+  color: #2563EB !important;
+}
+
+[data-theme="light"] .cm-s-base16-dark .cm-atom,
+[data-theme="light"] .cm-s-base16-dark .cm-number {
+  color: #6DB3F8 !important;
+}
+
+[data-theme="light"] .cm-s-base16-dark .cm-def,
+[data-theme="light"] .cm-s-base16-dark .cm-variable {
+  color: #14213D !important;
+}
+
+[data-theme="light"] .cm-s-base16-dark .cm-variable-2,
+[data-theme="light"] .cm-s-base16-dark .cm-variable-3 {
+  color: #2563EB !important;
+}
+
+[data-theme="light"] .cm-s-base16-dark .cm-property {
+  color: #2563EB !important;
+}
+
+[data-theme="light"] .cm-s-base16-dark .cm-operator {
+  color: #53627A !important;
+}
+
+[data-theme="light"] .cm-s-base16-dark .cm-comment {
+  color: #8290A5 !important;
+}
+
+[data-theme="light"] .cm-s-base16-dark .cm-string,
+[data-theme="light"] .cm-s-base16-dark .cm-string-2 {
+  color: #4F9CEB !important;
+}
+
+[data-theme="light"] .cm-s-base16-dark .cm-builtin,
+[data-theme="light"] .cm-s-base16-dark .cm-qualifier {
+  color: #2563EB !important;
+}
+
+[data-theme="light"] .cm-s-base16-dark .cm-meta {
+  color: #6DB3F8 !important;
+}
+
+[data-theme="light"] .cm-s-base16-dark .cm-bracket {
+  color: #53627A !important;
+}
+
+[data-theme="light"] .cm-s-base16-dark .cm-tag {
+  color: #2563EB !important;
+}
+
+[data-theme="light"] .cm-s-base16-dark .cm-attribute {
+  color: #6DB3F8 !important;
+}
+
+[data-theme="light"] .cm-s-base16-dark .cm-error {
+  color: #DC2626 !important;
+}
+
+/* =========================================================
+   EDITOR FOOTER
+   ========================================================= */
+
+[data-theme="light"] .ca-solve-editor-footer {
+  background:
+    linear-gradient(135deg,
+      rgba(179, 213, 255, 0.24),
+      rgba(255, 255, 255, 0.96)) !important;
+
+  border-top-color: rgba(20, 33, 61, 0.08) !important;
+}
+
+[data-theme="light"] .ca-solve-submit-hint {
+  color: #71829A !important;
+}
+
+[data-theme="light"] .ca-solve-submit-btn {
+  background: #2563EB !important;
+  color: #FFFFFF !important;
+
+  box-shadow:
+    0 8px 20px -10px rgba(37, 99, 235, 0.32),
+    0 0 18px rgba(109, 179, 248, 0.16);
+}
+
+[data-theme="light"] .ca-solve-submit-btn:hover {
+  background: #1D4ED8 !important;
+
+  box-shadow:
+    0 12px 24px -10px rgba(37, 99, 235, 0.36),
+    0 0 22px rgba(109, 179, 248, 0.18);
+}
+
+/* =========================================================
+   VERDICT
+   ========================================================= */
+
+[data-theme="light"] .ca-solve-verdict {
+  background: rgba(179, 213, 255, 0.20) !important;
+  border-color: rgba(109, 179, 248, 0.24) !important;
+  color: #53627A !important;
+}
+
+[data-theme="light"] .ca-solve-verdict--pending {
+  background: rgba(179, 213, 255, 0.16) !important;
+  color: #53627A !important;
+}
+
+[data-theme="light"] .ca-solve-verdict--accepted {
+  background: rgba(5, 150, 105, 0.08) !important;
+  border-color: rgba(5, 150, 105, 0.22) !important;
+  color: #059669 !important;
+}
+
+[data-theme="light"] .ca-solve-verdict--wrong {
+  background: rgba(220, 38, 38, 0.07) !important;
+  border-color: rgba(220, 38, 38, 0.20) !important;
+  color: #DC2626 !important;
+}

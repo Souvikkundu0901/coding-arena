@@ -158,4 +158,20 @@ public class MatchService {
         }
         return matchDto;
     }
+
+    @Transactional(readOnly = true)
+    public java.util.Map<String, Object> getActiveMatch(User currentUser) {
+        List<Match> matches = matchRepository.findActiveMatchesByUserId(
+                currentUser.getId(),
+                org.springframework.data.domain.PageRequest.of(0, 1)
+        );
+        if (!matches.isEmpty()) {
+            Match m = matches.get(0);
+            return java.util.Map.of(
+                    "active", true,
+                    "matchId", m.getId().toString()
+            );
+        }
+        return java.util.Map.of("active", false);
+    }
 }

@@ -148,6 +148,35 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    let challengePollInterval = null;
+
+    function startChallengeWaitPolling() {
+        if (challengePollInterval) {
+            clearInterval(challengePollInterval);
+        }
+        let elapsed = 0;
+        challengePollInterval = setInterval(async () => {
+            elapsed += 2;
+            if (elapsed > 120) {
+                clearInterval(challengePollInterval);
+                challengePollInterval = null;
+                return;
+            }
+            try {
+                if (typeof api.getActiveMatch === "function") {
+                    const res = await api.getActiveMatch();
+                    if (res && res.active && res.matchId) {
+                        clearInterval(challengePollInterval);
+                        challengePollInterval = null;
+                        window.location.href = `match.html?matchId=${encodeURIComponent(res.matchId)}`;
+                    }
+                }
+            } catch (err) {
+                // silent
+            }
+        }, 2000);
+    }
+
     /**
      * Handle clicking "Challenge" next to a friend.
      * @param {string} friendUsername
@@ -158,7 +187,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             const result = await api.challengeFriend(friendUsername);
-            alert(result?.message || `Challenge sent to ${friendUsername}.`);
+            alert(result?.message || `Challenge sent to ${friendUsername}! Waiting for them to accept...`);
+            startChallengeWaitPolling();
         } catch (error) {
             console.error("[Friends] Failed to send challenge:", error);
             alert(error?.message || "Failed to send challenge.");
@@ -318,6 +348,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
         checkForChallenges();
         setInterval(checkForChallenges, 5000);
+
+        setupDashboardWebSocket();
+    }
+
+    function setupDashboardWebSocket() {
+        const token = api.getToken();
+        let user = null;
+        try {
+            user = JSON.parse(localStorage.getItem("ca_user") || "null");
+        } catch (e) {}
+
+        if (!token || !user?.id || typeof CAWebSocket === "undefined") {
+            return;
+        }
+
+        try {
+            CAWebSocket.connect(user.id, token, () => {
+                console.log("[Friends] Connected to WebSocket for user", user.id);
+                CAWebSocket.subscribeToUserTopic(user.id, token, (event) => {
+                    console.log("[Friends] User topic event received:", event);
+                    const type = event?.type;
+                    if (type === "MATCH_FOUND" || type === "CHALLENGE_ACCEPTED") {
+                        const matchId = event?.matchId ||
+                            event?.data?.matchId ||
+                            event?.data?.id ||
+                            event?.match?.matchId ||
+                            event?.match?.id ||
+                            event?.id;
+
+                        if (matchId) {
+                            window.location.href = `match.html?matchId=${encodeURIComponent(matchId)}`;
+                        }
+                    } else if (type === "CHALLENGE_RECEIVED") {
+                        checkForChallenges();
+                    }
+                });
+            });
+        } catch (err) {
+            console.warn("[Friends] Could not connect dashboard WebSocket:", err.message);
+        }
     }
 
     initializeFriendsPanel();

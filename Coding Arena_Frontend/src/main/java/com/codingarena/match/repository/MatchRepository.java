@@ -24,6 +24,16 @@ public interface MatchRepository extends JpaRepository<Match, UUID> {
     int setWinnerAtomically(@Param("matchId") UUID matchId, @Param("winnerId") UUID winnerId);
 
     /**
+     * Atomic conditional update for forfeit:
+     * UPDATE matches SET status = 'COMPLETED', winner_id = :opponentId, ended_at = now()
+     * WHERE id = :matchId AND status = 'IN_PROGRESS' AND winner_id IS NULL
+     * Returns 1 if forfeit successfully ended the match, 0 if match already completed or expired.
+     */
+    @Modifying
+    @Query("UPDATE Match m SET m.status = 'COMPLETED', m.winnerId = :opponentId, m.endedAt = CURRENT_TIMESTAMP WHERE m.id = :matchId AND m.status = 'IN_PROGRESS' AND m.winnerId IS NULL")
+    int forfeitMatchAtomically(@Param("matchId") UUID matchId, @Param("opponentId") UUID opponentId);
+
+    /**
      * Finds all matches that are currently IN_PROGRESS and have passed their expires_at timestamp.
      */
     @Query("SELECT m FROM Match m WHERE m.status = 'IN_PROGRESS' AND m.expiresAt < CURRENT_TIMESTAMP")
@@ -43,4 +53,10 @@ public interface MatchRepository extends JpaRepository<Match, UUID> {
      */
     @Query("SELECT m FROM Match m WHERE (m.playerA.id = :userId OR m.playerB.id = :userId) AND m.status IN ('COMPLETED', 'EXPIRED') ORDER BY coalesce(m.endedAt, m.startedAt) DESC, m.startedAt DESC")
     List<Match> findCompletedOrExpiredMatchesByUserId(@Param("userId") UUID userId, Pageable pageable);
+
+    /**
+     * Finds active in-progress match for a specific user.
+     */
+    @Query("SELECT m FROM Match m WHERE (m.playerA.id = :userId OR m.playerB.id = :userId) AND m.status = 'IN_PROGRESS' ORDER BY m.startedAt DESC")
+    List<Match> findActiveMatchesByUserId(@Param("userId") UUID userId, Pageable pageable);
 }

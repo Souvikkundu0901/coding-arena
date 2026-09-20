@@ -100,8 +100,13 @@ public class ChallengeService {
         challenge.setMatch(match);
         challenge.setRespondedAt(LocalDateTime.now());
 
+        ChallengeDto dto = ChallengeDto.fromEntity(challenge);
+        ChallengeEvent acceptedEvent = new ChallengeEvent("CHALLENGE_ACCEPTED", dto);
+        messagingTemplate.convertAndSend("/topic/user/" + challenge.getChallenger().getId(), acceptedEvent);
+        messagingTemplate.convertAndSend("/topic/user/" + challenge.getChallenged().getId(), acceptedEvent);
+
         log.info("Challenge {} accepted by user {}. Match {} created.", challengeId, currentUser.getUsername(), match.getId());
-        return ChallengeDto.fromEntity(challenge);
+        return dto;
     }
 
     @Transactional

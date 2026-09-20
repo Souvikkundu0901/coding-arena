@@ -50,6 +50,18 @@ public class MatchEvent {
         this.reason = reason;
     }
 
+    public MatchDto getData() {
+        return match;
+    }
+
+    public java.util.UUID getMatchId() {
+        return match != null ? match.getId() : null;
+    }
+
+    public java.util.UUID getId() {
+        return match != null ? match.getId() : null;
+    }
+
     public LocalDateTime getTimestamp() {
         return timestamp;
     }

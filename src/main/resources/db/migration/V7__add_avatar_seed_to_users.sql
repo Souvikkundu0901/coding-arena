@@ -1,0 +1,1 @@
+ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_seed VARCHAR(100) DEFAULT 'character-01';

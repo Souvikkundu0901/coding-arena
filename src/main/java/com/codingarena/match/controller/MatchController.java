@@ -23,6 +23,11 @@ public class MatchController {
         this.matchService = matchService;
     }
 
+    @GetMapping("/active")
+    public ResponseEntity<java.util.Map<String, Object>> getActiveMatch(@AuthenticationPrincipal User currentUser) {
+        return ResponseEntity.ok(matchService.getActiveMatch(currentUser));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<MatchDto> getMatchDetails(@PathVariable UUID id,
                                                      @AuthenticationPrincipal User currentUser) {

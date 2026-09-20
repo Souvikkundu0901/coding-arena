@@ -262,6 +262,22 @@ async function getMatch(matchId) {
 }
 
 /**
+ * Check if the current user has an active match in progress.
+ * @returns {Promise<Object>}
+ */
+async function getActiveMatch() {
+  if (MOCK_MODE) {
+    return { active: false };
+  } else {
+    try {
+      return await apiRequest("/matches/active", "GET");
+    } catch (error) {
+      return { active: false };
+    }
+  }
+}
+
+/**
  * Submit code for a match.
  * @param {string|number} matchId - Match ID.
  * @param {string} code - Source code to submit.
@@ -354,11 +370,17 @@ async function updateProfile(updates) {
 
     const storedUser = JSON.parse(localStorage.getItem("ca_user") || "{}");
     const updatedUser = { ...storedUser, ...updates };
-
+    localStorage.setItem("ca_user", JSON.stringify(updatedUser));
     return updatedUser;
   } else {
     try {
-      return await apiRequest("/users/me", "PATCH", updates);
+      const updatedUser = await apiRequest("/users/me", "PATCH", updates);
+      if (updatedUser) {
+        const storedUser = JSON.parse(localStorage.getItem("ca_user") || "{}");
+        const merged = { ...storedUser, ...updatedUser };
+        localStorage.setItem("ca_user", JSON.stringify(merged));
+      }
+      return updatedUser;
     } catch (error) {
       throw new Error(`Updating profile failed: ${error.message}`);
     }
@@ -1013,6 +1035,7 @@ window.CodingArenaAPI = {
   joinQueue,
   leaveQueue,
   getMatch,
+  getActiveMatch,
   submitCode,
   getSubmissions,
   getRecentMatches,

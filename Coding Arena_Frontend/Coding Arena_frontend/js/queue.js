@@ -112,17 +112,36 @@ document.addEventListener("DOMContentLoaded", () => {
         const opponentNameElement =
             document.querySelector("#opponentName");
 
-        const matchData = event?.data || {};
+        const matchData = event?.data || event?.match || event || {};
 
-        const opponentName =
+        let currentUsername = "";
+        try {
+            const rawUser = localStorage.getItem("ca_user");
+            if (rawUser) {
+                currentUsername = JSON.parse(rawUser)?.username || "";
+            }
+        } catch (e) {}
+
+        let opponentName =
             matchData.opponentName ||
             matchData.opponent?.username ||
-            matchData.opponent?.name ||
-            "Opponent";
+            matchData.opponent?.name;
+
+        if (!opponentName && Array.isArray(matchData.players) && matchData.players.length > 0) {
+            const opp = matchData.players.find(p => p.username && p.username !== currentUsername);
+            if (opp) opponentName = opp.username;
+        }
+        if (!opponentName) {
+            if (matchData.playerAUsername && matchData.playerAUsername !== currentUsername) {
+                opponentName = matchData.playerAUsername;
+            } else if (matchData.playerBUsername && matchData.playerBUsername !== currentUsername) {
+                opponentName = matchData.playerBUsername;
+            }
+        }
+        opponentName = opponentName || "Opponent";
 
         if (opponentNameElement) {
-            opponentNameElement.textContent =
-                opponentName;
+            opponentNameElement.textContent = opponentName;
         }
 
         if (banner) {
@@ -131,7 +150,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const matchId =
             matchData.matchId ??
-            matchData.id;
+            matchData.id ??
+            event?.matchId ??
+            event?.id;
 
         if (!matchId) {
             updateQueueStatus(

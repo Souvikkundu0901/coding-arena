@@ -1,19 +1,28 @@
 package com.codingarena.match.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.time.LocalDateTime;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MatchEvent {
 
     private String type; // MATCH_FOUND / MATCH_START / MATCH_END
     private MatchDto match;
+    private String reason;
     private LocalDateTime timestamp;
 
     public MatchEvent() {
     }
 
     public MatchEvent(String type, MatchDto match) {
+        this(type, match, null);
+    }
+
+    public MatchEvent(String type, MatchDto match, String reason) {
         this.type = type;
         this.match = match;
+        this.reason = reason;
         this.timestamp = LocalDateTime.now();
     }
 
@@ -31,6 +40,26 @@ public class MatchEvent {
 
     public void setMatch(MatchDto match) {
         this.match = match;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public MatchDto getData() {
+        return match;
+    }
+
+    public java.util.UUID getMatchId() {
+        return match != null ? match.getId() : null;
+    }
+
+    public java.util.UUID getId() {
+        return match != null ? match.getId() : null;
     }
 
     public LocalDateTime getTimestamp() {

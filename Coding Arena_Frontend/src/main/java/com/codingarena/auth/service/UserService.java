@@ -32,16 +32,29 @@ public class UserService {
 
     @Transactional
     public UserDto updateUsername(User currentUser, UpdateUsernameRequest request) {
-        String newUsername = request.getUsername().trim();
-        if (!newUsername.equalsIgnoreCase(currentUser.getUsername())) {
-            userRepository.findByUsername(newUsername).ifPresent(existing -> {
-                if (!existing.getId().equals(currentUser.getId())) {
-                    throw new UserAlreadyExistsException("Username is already taken");
-                }
-            });
-            currentUser.setUsername(newUsername);
+        boolean changed = false;
+
+        if (request.getAvatarSeed() != null && !request.getAvatarSeed().isBlank()) {
+            currentUser.setAvatarSeed(request.getAvatarSeed().trim());
+            changed = true;
+        }
+
+        if (request.getUsername() != null && !request.getUsername().isBlank()) {
+            String newUsername = request.getUsername().trim();
+            if (!newUsername.equalsIgnoreCase(currentUser.getUsername())) {
+                userRepository.findByUsername(newUsername).ifPresent(existing -> {
+                    if (!existing.getId().equals(currentUser.getId())) {
+                        throw new UserAlreadyExistsException("Username is already taken");
+                    }
+                });
+                currentUser.setUsername(newUsername);
+                log.info("Updated username for user {} to {}", currentUser.getId(), newUsername);
+                changed = true;
+            }
+        }
+
+        if (changed) {
             User saved = userRepository.save(currentUser);
-            log.info("Updated username for user {} to {}", currentUser.getId(), newUsername);
             return UserDto.fromEntity(saved);
         }
         return UserDto.fromEntity(currentUser);

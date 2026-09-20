@@ -53,4 +53,10 @@ public interface MatchRepository extends JpaRepository<Match, UUID> {
      */
     @Query("SELECT m FROM Match m WHERE (m.playerA.id = :userId OR m.playerB.id = :userId) AND m.status IN ('COMPLETED', 'EXPIRED') ORDER BY coalesce(m.endedAt, m.startedAt) DESC, m.startedAt DESC")
     List<Match> findCompletedOrExpiredMatchesByUserId(@Param("userId") UUID userId, Pageable pageable);
+
+    /**
+     * Finds active in-progress match for a specific user.
+     */
+    @Query("SELECT m FROM Match m WHERE (m.playerA.id = :userId OR m.playerB.id = :userId) AND m.status = 'IN_PROGRESS' ORDER BY m.startedAt DESC")
+    List<Match> findActiveMatchesByUserId(@Param("userId") UUID userId, Pageable pageable);
 }

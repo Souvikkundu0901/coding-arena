@@ -13,18 +13,24 @@ public class UserDto {
     private Integer rating;
     private Integer wins;
     private Integer losses;
+    private String avatarSeed;
     private LocalDateTime createdAt;
 
     public UserDto() {
     }
 
     public UserDto(UUID id, String username, String email, Integer rating, Integer wins, Integer losses, LocalDateTime createdAt) {
+        this(id, username, email, rating, wins, losses, "character-01", createdAt);
+    }
+
+    public UserDto(UUID id, String username, String email, Integer rating, Integer wins, Integer losses, String avatarSeed, LocalDateTime createdAt) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.rating = rating;
         this.wins = wins;
         this.losses = losses;
+        this.avatarSeed = avatarSeed != null ? avatarSeed : "character-01";
         this.createdAt = createdAt;
     }
 
@@ -36,6 +42,7 @@ public class UserDto {
                 user.getRating(),
                 user.getWins() != null ? user.getWins() : 0,
                 user.getLosses() != null ? user.getLosses() : 0,
+                user.getAvatarSeed(),
                 user.getCreatedAt()
         );
     }
@@ -86,6 +93,14 @@ public class UserDto {
 
     public void setLosses(Integer losses) {
         this.losses = losses;
+    }
+
+    public String getAvatarSeed() {
+        return avatarSeed != null ? avatarSeed : "character-01";
+    }
+
+    public void setAvatarSeed(String avatarSeed) {
+        this.avatarSeed = avatarSeed;
     }
 
     public LocalDateTime getCreatedAt() {

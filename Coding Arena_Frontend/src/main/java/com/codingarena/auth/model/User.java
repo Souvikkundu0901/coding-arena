@@ -33,6 +33,9 @@ public class User {
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = false;
 
+    @Column(name = "avatar_seed")
+    private String avatarSeed = "character-01";
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -115,6 +118,14 @@ public class User {
 
     public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public String getAvatarSeed() {
+        return avatarSeed != null ? avatarSeed : "character-01";
+    }
+
+    public void setAvatarSeed(String avatarSeed) {
+        this.avatarSeed = avatarSeed;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -54,6 +54,10 @@ public class MatchDto {
         return id;
     }
 
+    public UUID getMatchId() {
+        return id;
+    }
+
     public void setId(UUID id) {
         this.id = id;
     }

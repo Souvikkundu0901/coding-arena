@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Size;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UpdateUsernameRequest {
 
-    @NotBlank(message = "Username is required")
     @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
     private String username;
 
@@ -18,6 +17,11 @@ public class UpdateUsernameRequest {
 
     public UpdateUsernameRequest(String username) {
         this.username = username;
+    }
+
+    public UpdateUsernameRequest(String username, String avatarSeed) {
+        this.username = username;
+        this.avatarSeed = avatarSeed;
     }
 
     public String getUsername() {

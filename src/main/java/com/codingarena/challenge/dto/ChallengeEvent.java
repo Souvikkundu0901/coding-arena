@@ -33,6 +33,14 @@ public class ChallengeEvent {
         this.challenge = challenge;
     }
 
+    public ChallengeDto getData() {
+        return challenge;
+    }
+
+    public java.util.UUID getMatchId() {
+        return challenge != null ? challenge.getMatchId() : null;
+    }
+
     public LocalDateTime getTimestamp() {
         return timestamp;
     }

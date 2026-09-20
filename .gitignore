@@ -3,3 +3,5 @@ target/
 *.class
 .idea/
 *.iml
+startup-*.txt
+*.log

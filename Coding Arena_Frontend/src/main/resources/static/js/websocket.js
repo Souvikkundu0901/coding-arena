@@ -31,9 +31,12 @@ const CAWebSocket = {
             return;
         } else {
             try {
-                const wsUrl = (typeof window !== "undefined" && window.location && window.location.protocol.startsWith("http"))
-                    ? `${window.location.origin}/ws`
-                    : "http://localhost:8080/ws";
+                const backendOrigin = (typeof window !== "undefined" && (window.CODESS_BACKEND_URL || localStorage.getItem("codess_backend_url")))
+                    ? (window.CODESS_BACKEND_URL || localStorage.getItem("codess_backend_url")).replace(/\/$/, "")
+                    : (typeof window !== "undefined" && window.location && window.location.protocol.startsWith("http"))
+                    ? window.location.origin
+                    : "http://localhost:8080";
+                const wsUrl = `${backendOrigin}/ws`;
 
                 this.client = new StompJs.Client({
                     webSocketFactory: () => new SockJS(wsUrl),

@@ -1,5 +1,10 @@
 const MOCK_MODE = false; // flip to false when backend is ready
-const API_BASE = (typeof window !== "undefined" && window.location && window.location.protocol.startsWith("http"))
+const CODESS_CUSTOM_BACKEND = (typeof window !== "undefined")
+  ? (window.CODESS_BACKEND_URL || localStorage.getItem("codess_backend_url"))
+  : null;
+const API_BASE = CODESS_CUSTOM_BACKEND
+  ? `${CODESS_CUSTOM_BACKEND.replace(/\/$/, "")}/api`
+  : (typeof window !== "undefined" && window.location && window.location.protocol.startsWith("http"))
   ? `${window.location.origin}/api`
   : "http://localhost:8080/api";
 

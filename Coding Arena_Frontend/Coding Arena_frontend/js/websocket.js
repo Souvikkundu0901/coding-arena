@@ -31,11 +31,24 @@ const CAWebSocket = {
             return;
         } else {
             try {
-                const backendOrigin = (typeof window !== "undefined" && (window.CODESS_BACKEND_URL || localStorage.getItem("codess_backend_url")))
-                    ? (window.CODESS_BACKEND_URL || localStorage.getItem("codess_backend_url")).replace(/\/$/, "")
-                    : (typeof window !== "undefined" && window.location && window.location.protocol.startsWith("http"))
-                    ? window.location.origin
-                    : "http://localhost:8080";
+                const CODESS_DEFAULT_REMOTE_BACKEND = "https://codess-8rrg.onrender.com";
+                let backendOrigin = "http://localhost:8080";
+                if (typeof window !== "undefined") {
+                    if (window.CODESS_BACKEND_URL) {
+                        backendOrigin = window.CODESS_BACKEND_URL.replace(/\/$/, "");
+                    } else if (localStorage.getItem("codess_backend_url")) {
+                        backendOrigin = localStorage.getItem("codess_backend_url").replace(/\/$/, "");
+                    } else if (window.location && window.location.hostname) {
+                        const host = window.location.hostname;
+                        if (host === "localhost" || host === "127.0.0.1") {
+                            backendOrigin = window.location.port === "8080" ? window.location.origin : "http://localhost:8080";
+                        } else if (host.endsWith("onrender.com")) {
+                            backendOrigin = window.location.origin;
+                        } else {
+                            backendOrigin = CODESS_DEFAULT_REMOTE_BACKEND;
+                        }
+                    }
+                }
                 const wsUrl = `${backendOrigin}/ws`;
 
                 this.client = new StompJs.Client({

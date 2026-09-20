@@ -1,12 +1,30 @@
 const MOCK_MODE = false; // flip to false when backend is ready
-const CODESS_CUSTOM_BACKEND = (typeof window !== "undefined")
-  ? (window.CODESS_BACKEND_URL || localStorage.getItem("codess_backend_url"))
-  : null;
-const API_BASE = CODESS_CUSTOM_BACKEND
-  ? `${CODESS_CUSTOM_BACKEND.replace(/\/$/, "")}/api`
-  : (typeof window !== "undefined" && window.location && window.location.protocol.startsWith("http"))
-  ? `${window.location.origin}/api`
-  : "http://localhost:8080/api";
+const CODESS_DEFAULT_REMOTE_BACKEND = "https://codess-8rrg.onrender.com";
+
+function getCodessBackendOrigin() {
+  if (typeof window !== "undefined") {
+    if (window.CODESS_BACKEND_URL) {
+      return window.CODESS_BACKEND_URL.replace(/\/$/, "");
+    }
+    const stored = localStorage.getItem("codess_backend_url");
+    if (stored) {
+      return stored.replace(/\/$/, "");
+    }
+    if (window.location && window.location.hostname) {
+      const host = window.location.hostname;
+      if (host === "localhost" || host === "127.0.0.1") {
+        return window.location.port === "8080" ? window.location.origin : "http://localhost:8080";
+      }
+      if (host.endsWith("onrender.com")) {
+        return window.location.origin;
+      }
+      return CODESS_DEFAULT_REMOTE_BACKEND;
+    }
+  }
+  return "http://localhost:8080";
+}
+
+const API_BASE = `${getCodessBackendOrigin()}/api`;
 
 /**
  * Get the JWT token stored in localStorage.

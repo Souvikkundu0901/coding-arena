@@ -32,6 +32,9 @@ class AuthServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private CaptchaService captchaService;
+
     private JwtTokenProvider tokenProvider;
 
     private AuthService authService;
@@ -47,7 +50,7 @@ class AuthServiceTest {
                 "c3VwZXItc2VjcmV0LWtleS1mb3ItY29kaW5nLWFyZW5hLWp3dC1hdXRoZW50aWNhdGlvbi0yNTYtYml0cw==",
                 86400000L
         );
-        authService = new AuthService(userRepository, passwordEncoder, tokenProvider);
+        authService = new AuthService(userRepository, passwordEncoder, tokenProvider, captchaService);
 
         mockUserId = UUID.randomUUID();
         registerRequest = new RegisterRequest("testuser", "test@example.com", "password123");
@@ -168,5 +171,45 @@ class AuthServiceTest {
         assertEquals(mockUserId, userDto.getId());
         assertEquals("testuser", userDto.getUsername());
         assertEquals("test@example.com", userDto.getEmail());
+    }
+
+    @Test
+    void register_DisposableEmail_ThrowsIllegalArgumentException() {
+        RegisterRequest badEmailReq = new RegisterRequest("throwawayUser", "bot@mailinator.com", "password123");
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> authService.register(badEmailReq)
+        );
+
+        assertEquals("This email provider is not allowed", exception.getMessage());
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    void register_DisposableEmail_WithMixedCaseAndWhitespace_ThrowsIllegalArgumentException() {
+        RegisterRequest badEmailReq = new RegisterRequest("throwawayUser2", "  Spam@10MinuteMail.COM ", "password123");
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> authService.register(badEmailReq)
+        );
+
+        assertEquals("This email provider is not allowed", exception.getMessage());
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    void register_CaptchaVerificationFailure_ThrowsIllegalArgumentException() {
+        doThrow(new IllegalArgumentException("CAPTCHA verification failed"))
+                .when(captchaService).verifyToken(any());
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> authService.register(registerRequest)
+        );
+
+        assertEquals("CAPTCHA verification failed", exception.getMessage());
+        verify(userRepository, never()).save(any(User.class));
     }
 }

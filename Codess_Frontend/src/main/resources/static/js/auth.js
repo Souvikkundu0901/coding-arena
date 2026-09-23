@@ -45,6 +45,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // ---- Terms checkbox live validation reset ----
+  const agreeTerms = document.getElementById("agreeTerms");
+  if (agreeTerms) {
+    agreeTerms.addEventListener("change", () => {
+      const errorEl = document.getElementById("registerError");
+      if (errorEl && agreeTerms.checked && errorEl.textContent.includes("Terms")) {
+        errorEl.textContent = "";
+        errorEl.style.display = "none";
+      }
+    });
+  }
+
 });
 
 async function handleLogin(e) {
@@ -73,19 +85,57 @@ async function handleLogin(e) {
 async function handleRegister(e) {
   e.preventDefault();
 
+  const errorEl = document.getElementById("registerError");
+  if (errorEl) {
+    errorEl.textContent = "";
+    errorEl.style.display = "none";
+  }
+
+  const agreeTerms = document.getElementById("agreeTerms");
+  if (agreeTerms && !agreeTerms.checked) {
+    if (errorEl) {
+      errorEl.textContent = "You must agree to the Terms & Conditions and Privacy Policy to register.";
+      errorEl.style.display = "block";
+      errorEl.classList.remove("d-none");
+    }
+    agreeTerms.focus();
+    return;
+  }
+
+  const captchaWidget = document.querySelector(".g-recaptcha");
+  let captchaToken = "";
+  if (captchaWidget && typeof grecaptcha !== "undefined") {
+    captchaToken = grecaptcha.getResponse();
+    const siteKey = captchaWidget.getAttribute("data-sitekey");
+    if (siteKey && siteKey !== "YOUR_RECAPTCHA_SITE_KEY_HERE" && !captchaToken) {
+      if (errorEl) {
+        errorEl.textContent = "Please complete the CAPTCHA.";
+        errorEl.style.display = "block";
+        errorEl.classList.remove("d-none");
+      }
+      return;
+    }
+  }
+
   try {
     const username = document.getElementById("username").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    const result = await CodingArenaAPI.registerUser(username, email, password);
+    const result = await CodingArenaAPI.registerUser(username, email, password, captchaToken);
 
     CodingArenaAPI.setToken(result.token);
     localStorage.setItem("ca_user", JSON.stringify(result.user));
 
     window.location.href = "index.html";
   } catch (error) {
-    const errorEl = document.getElementById("registerError");
+    if (typeof grecaptcha !== "undefined" && typeof grecaptcha.reset === "function") {
+      try {
+        grecaptcha.reset();
+      } catch (e) {
+        // ignore
+      }
+    }
     if (errorEl) {
       errorEl.textContent = error.message;
       errorEl.style.display = "block";

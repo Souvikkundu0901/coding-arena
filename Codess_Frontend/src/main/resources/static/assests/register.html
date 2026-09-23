@@ -1,13 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Coding Arena registration page. Create an account for competitive 1v1 coding matches.">
-    <title>Coding Arena | Register</title>
+        content="Codess registration page. Create an account for competitive 1v1 coding matches.">
+    <title>Codess | Register</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,6 +21,8 @@
     <!-- IMPORTANT: shared tokens load before page-specific auth CSS. -->
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/auth.css">
+    <script src="../js/theme.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body class="ca-auth-page">
@@ -29,15 +31,15 @@
         <div class="ca-auth-glow ca-auth-glow--primary" aria-hidden="true"></div>
         <div class="ca-auth-glow ca-auth-glow--secondary" aria-hidden="true"></div>
 
-        <a href="login.html" class="ca-theme-orb" aria-label="Back to login" title="Back to login">
+        <button type="button" class="ca-theme-orb" aria-label="Switch theme" title="Switch theme">
             <i class="bi bi-sun-fill" aria-hidden="true"></i>
-        </a>
+        </button>
 
         <div class="ca-auth-wrapper">
             <div class="ca-auth-branding">
-                <a href="login.html" class="ca-auth-wordmark" aria-label="Coding Arena home">
+                <a href="login.html" class="ca-auth-wordmark" aria-label="Codess home">
                     <span class="ca-auth-wordmark__brace ca-auth-wordmark__brace--left">{</span>
-                    <span class="ca-auth-wordmark__text">Coding Arena</span>
+                    <span class="ca-auth-wordmark__text">Codess</span>
                     <span class="ca-auth-wordmark__brace ca-auth-wordmark__brace--right">}</span>
                 </a>
                 <p class="ca-auth-tagline">Competitive coding. One match at a time.</p>
@@ -49,7 +51,7 @@
             </div>
 
             <section class="ca-auth-card" aria-labelledby="registerTitle">
-                <h1 id="registerTitle" class="visually-hidden">Create your Coding Arena account</h1>
+                <h1 id="registerTitle" class="visually-hidden">Create your Codess account</h1>
 
                 <form id="registerForm" class="ca-auth-form" novalidate>
                     <div class="ca-auth-field">
@@ -76,6 +78,17 @@
                         </div>
                     </div>
 
+                    <div class="ca-auth-checkbox-field">
+                        <input type="checkbox" id="agreeTerms" name="agreeTerms" class="ca-auth-checkbox" required>
+                        <label for="agreeTerms" class="ca-auth-checkbox-label">
+                            I agree to the <a href="terms.html" target="_blank" rel="noopener noreferrer">Terms &amp; Conditions</a> and <a href="privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <div class="ca-auth-field ca-captcha-field" style="margin: 1rem 0; display: flex; justify-content: center;">
+                        <div class="g-recaptcha" data-sitekey="6Ldsq8otAAAAAIAK5Y4nuE1_oQJyLVCOBYnJvIS7"></div>
+                    </div>
+
                     <button type="submit" id="registerBtn" class="ca-auth-submit">
                         <span>Create Account</span>
                     </button>
@@ -89,9 +102,18 @@
                 Already have an account?
                 <a href="login.html" class="ca-auth-link">Sign in</a>
             </p>
+
+            <footer class="ca-auth-footer-nav">
+                <a href="terms.html" class="ca-auth-footer-link">Terms &amp; Conditions</a>
+                <span class="ca-auth-footer-sep">&bull;</span>
+                <a href="privacy.html" class="ca-auth-footer-link">Privacy Policy</a>
+            </footer>
         </div>
-    </main>        <script src="../js/theme.js"></script>
-    <script src="../js/api.js"></script>    <script src="../js/auth.js"></script>    <script src="../js/websocket.js"></script>
+    </main>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/websocket.js"></script>
 </body>
 
 </html>

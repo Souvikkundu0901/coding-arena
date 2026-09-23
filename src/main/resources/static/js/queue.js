@@ -180,8 +180,8 @@ document.addEventListener("DOMContentLoaded", () => {
             redirectTimeout = null;
         }
 
-        window.location.href =
-            `match.html?matchId=${encodeURIComponent(matchId)}`;
+        sessionStorage.setItem("currentMatchId", matchId);
+        window.location.href = "match.html";
     }
 
     /**

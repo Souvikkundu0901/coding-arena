@@ -121,9 +121,10 @@ const MOCK_USERS = [
  * @param {string} username - Username.
  * @param {string} email - User email.
  * @param {string} password - User password.
+ * @param {string} [captchaToken] - Google reCAPTCHA response token.
  * @returns {Promise<Object>} Registration response.
  */
-async function registerUser(username, email, password) {
+async function registerUser(username, email, password, captchaToken) {
   if (MOCK_MODE) {
     await new Promise(r => setTimeout(r, 500));
     return {
@@ -132,10 +133,14 @@ async function registerUser(username, email, password) {
     };
   } else {
     try {
+      const payload = { username, email, password };
+      if (captchaToken) {
+        payload.captchaToken = captchaToken;
+      }
       return await apiRequest(
         "/auth/register",
         "POST",
-        { username, email, password },
+        payload,
         false
       );
     } catch (error) {

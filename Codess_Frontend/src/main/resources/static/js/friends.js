@@ -167,8 +167,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     const res = await api.getActiveMatch();
                     if (res && res.active && res.matchId) {
                         clearInterval(challengePollInterval);
-                        challengePollInterval = null;
-                        window.location.href = `match.html?matchId=${encodeURIComponent(res.matchId)}`;
+                        sessionStorage.setItem("currentMatchId", res.matchId);
+                        window.location.href = "match.html";
                     }
                 }
             } catch (err) {
@@ -227,7 +227,8 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const result = await api.respondToChallenge(challenge.id, "accept");
                 cleanUp();
-                window.location.href = `match.html?matchId=${encodeURIComponent(result.matchId)}`;
+                sessionStorage.setItem("currentMatchId", result.matchId);
+                window.location.href = "match.html";
             } catch (error) {
                 console.error("[Friends] Failed to accept challenge:", error);
                 alert(error?.message || "Failed to accept challenge.");
@@ -378,7 +379,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             event?.id;
 
                         if (matchId) {
-                            window.location.href = `match.html?matchId=${encodeURIComponent(matchId)}`;
+                            sessionStorage.setItem("currentMatchId", matchId);
+                            window.location.href = "match.html";
                         }
                     } else if (type === "CHALLENGE_RECEIVED") {
                         checkForChallenges();

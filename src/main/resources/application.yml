@@ -41,6 +41,9 @@ judge0:
 rapidapi:
   key: ${RAPIDAPI_KEY:}
 
+captcha:
+  secret-key: ${RECAPTCHA_SECRET_KEY:}
+
 match:
   duration-minutes: ${MATCH_DURATION_MINUTES:30}
 

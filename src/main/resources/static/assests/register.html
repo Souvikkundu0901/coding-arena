@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/auth.css">
     <script src="../js/theme.js"></script>
-
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body class="ca-auth-page">
@@ -83,6 +83,10 @@
                         <label for="agreeTerms" class="ca-auth-checkbox-label">
                             I agree to the <a href="terms.html" target="_blank" rel="noopener noreferrer">Terms &amp; Conditions</a> and <a href="privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
                         </label>
+                    </div>
+
+                    <div class="ca-auth-field ca-captcha-field" style="margin: 1rem 0; display: flex; justify-content: center;">
+                        <div class="g-recaptcha" data-sitekey="6Ldsq8otAAAAAIAK5Y4nuE1_oQJyLVCOBYnJvIS7"></div>
                     </div>
 
                     <button type="submit" id="registerBtn" class="ca-auth-submit">

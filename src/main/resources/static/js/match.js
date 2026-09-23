@@ -1910,19 +1910,22 @@ document.addEventListener(
                 );
 
             matchId =
+                sessionStorage.getItem(
+                    "currentMatchId"
+                ) ||
                 urlParams.get(
                     "matchId"
                 );
 
             if (!matchId) {
                 showPageError(
-                    "Invalid match ID."
+                    "No active match found. Redirecting to home..."
                 );
 
                 setTimeout(() => {
                     window.location.href =
                         "index.html";
-                }, 1000);
+                }, 1500);
 
                 return;
             }

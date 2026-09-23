@@ -9,6 +9,7 @@ import com.codingarena.auth.exception.UserAlreadyExistsException;
 import com.codingarena.auth.model.User;
 import com.codingarena.auth.repository.UserRepository;
 import com.codingarena.auth.security.JwtTokenProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,18 +20,37 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
+    private final CaptchaService captchaService;
+
+    @Autowired
+    public AuthService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder,
+                       JwtTokenProvider tokenProvider,
+                       CaptchaService captchaService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.tokenProvider = tokenProvider;
+        this.captchaService = captchaService;
+    }
 
     public AuthService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
                        JwtTokenProvider tokenProvider) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.tokenProvider = tokenProvider;
+        this(userRepository, passwordEncoder, tokenProvider, new DefaultCaptchaService("", (org.springframework.web.client.RestOperations) null));
     }
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
+        if (captchaService != null) {
+            captchaService.verifyToken(request.getCaptchaToken());
+        }
+
         String normalizedEmail = request.getEmail().toLowerCase().trim();
+
+        if (DisposableEmailBlocklist.isBlocked(normalizedEmail)) {
+            throw new IllegalArgumentException("This email provider is not allowed");
+        }
+
         if (userRepository.existsByEmail(normalizedEmail)) {
             throw new UserAlreadyExistsException("Email already exists");
         }

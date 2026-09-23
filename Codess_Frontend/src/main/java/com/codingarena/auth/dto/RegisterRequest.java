@@ -18,6 +18,8 @@ public class RegisterRequest {
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
+    private String captchaToken;
+
     public RegisterRequest() {
     }
 
@@ -25,6 +27,13 @@ public class RegisterRequest {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public RegisterRequest(String username, String email, String password, String captchaToken) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.captchaToken = captchaToken;
     }
 
     public String getUsername() {
@@ -49,5 +58,13 @@ public class RegisterRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getCaptchaToken() {
+        return captchaToken;
+    }
+
+    public void setCaptchaToken(String captchaToken) {
+        this.captchaToken = captchaToken;
     }
 }

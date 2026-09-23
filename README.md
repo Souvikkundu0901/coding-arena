@@ -5,11 +5,12 @@
 </p>
 
 <p align="center">
-  <strong>Fast-paced, real-time 1v1 multiplayer competitive coding battleground with live code evaluation, Elo ratings, anti-cheat detection, and friend challenges.</strong>
+  <strong>Fast-paced, real-time 1v1 multiplayer competitive coding battleground with live code evaluation, Elo ratings, anti-cheat detection, bot protection, and friend challenges.</strong>
 </p>
 
 <p align="center">
-  <a href="https://codess-8rrg.onrender.com"><img src="https://img.shields.io/badge/Live%20Demo-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Live Demo"></a>
+  <a href="https://coding-arena-phi.vercel.app"><img src="https://img.shields.io/badge/Frontend-Vercel-black?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel Frontend"></a>
+  <a href="https://codess-8rrg.onrender.com"><img src="https://img.shields.io/badge/Backend-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Live Backend"></a>
   <img src="https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 17">
   <img src="https://img.shields.io/badge/Spring_Boot-3.2.5-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot">
   <img src="https://img.shields.io/badge/PostgreSQL-Supabase-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
@@ -39,7 +40,7 @@
 
 **Codess** is a gamified, real-time competitive programming platform where developers go head-to-head in speed coding battles. 
 
-Players can enter a quick-match matchmaking queue or challenge their friends directly in private duels. The platform automatically evaluates code submissions across multiple languages (Python, Java, C++, JavaScript) via **Judge0**, applies dynamic **Elo rating calculations**, prevents cheating through **active tab monitoring and auto-forfeit**, and synchronizes live match events via **WebSockets (STOMP)**.
+Players can enter a quick-match matchmaking queue or challenge their friends directly in private duels. The platform automatically evaluates code submissions across multiple languages (Python, Java, C++, JavaScript) via **Judge0**, applies dynamic **Elo rating calculations**, prevents cheating through **active tab monitoring and auto-forfeit**, safeguards against bot accounts using **Google reCAPTCHA v2 and disposable email blocking**, and synchronizes live match events via **WebSockets (STOMP)**.
 
 ---
 
@@ -48,7 +49,10 @@ Players can enter a quick-match matchmaking queue or challenge their friends dir
 - ⚡ **Atomic Redis Matchmaking**: Sub-millisecond queue management powered by atomic Redis Lua scripts that pair players within tight Elo rating windows.
 - ⚔️ **Social Hub & Friend Duels**: Add friends, track online activity, and challenge friends to private battles with real-time invitation modals.
 - 💻 **Live Code Execution (Judge0 CE)**: Multi-language code evaluation with real-time feedback for compilation errors, runtime errors, and sample/hidden test cases.
+- 🤖 **Bot & Sybil Defense**: Google reCAPTCHA v2 registration verification and real-time disposable email blocklist (`mailinator.com`, `10minutemail.com`, etc.).
 - 🛡️ **Anti-Cheat & Tab-Switch Forfeit**: Automatic match forfeit mechanism detecting browser tab switches and window defocus during ranked battles.
+- 🚪 **Disconnect & Forfeit Victory Engine**: If a player leaves, closes their tab, or disconnects, an auto-forfeit occurs after a 6-second grace period, instantly awarding the win and Elo rating to the opponent.
+- 🔒 **URL Privacy & Clean Navigation**: Match state is stored securely in private `sessionStorage` rather than visible URL parameters (`match.html` with clean URLs). Direct visits without a match ID redirect cleanly to the dashboard.
 - 📈 **Dynamic Elo Rating Engine**: Accurate Elo rating updates upon match completion with transparent rating deltas (+16 / -16) and streak tracking.
 - 🎭 **Customizable 3D & 2D Character Avatars**: Pick custom character avatars saved directly to your profile and reflected across all screens.
 - ⏱️ **Active Match Expiry Engine**: Background scheduler that automatically expires abandoned matches without corrupting player ratings.
@@ -65,19 +69,25 @@ flowchart TD
     subgraph "Codess Cloud Backend (Render)"
         Gateway["Spring Boot 3.2.5 REST & WebSocket Controller"]
         Sec["Spring Security + JWT Filter + RateLimiter"]
+        Captcha["CaptchaService & DisposableEmailBlocklist"]
         MatchSvc["Matchmaking & Challenge Service"]
+        SessionTracker["MatchSessionTracker (Disconnect Listener)"]
         JudgeClient["Judge0 RapidAPI Client"]
     end
 
-    subgraph "Cloud Infrastructure"
+    subgraph "Cloud Infrastructure & External APIs"
         PG[(Supabase PostgreSQL\nConnection Pooler)]
         Redis[(Upstash Redis\nTLS Queue)]
         Judge0["RapidAPI Judge0 CE Sandbox"]
+        RecaptchaAPI["Google reCAPTCHA API (siteverify)"]
     end
 
     Client <-->|"HTTPS REST / WSS STOMP"| Gateway
     Gateway --> Sec
+    Sec --> Captcha
+    Captcha -.->|"Validate Token"| RecaptchaAPI
     Sec --> MatchSvc
+    Gateway --> SessionTracker
     MatchSvc <-->|"Lua Scripts / Pop Pairs"| Redis
     MatchSvc <-->|"Flyway Migrations / JPA"| PG
     Gateway -->|"Submit Code"| JudgeClient
@@ -90,20 +100,21 @@ flowchart TD
 
 ### Backend
 - **Framework**: Java 17, Spring Boot 3.2.5
-- **Security**: Spring Security 6, BCrypt, JJWT (HS256)
+- **Security & Bot Protection**: Spring Security 6, BCrypt, JJWT (HS256), Google reCAPTCHA v2 Server Verification
 - **Database Access**: Spring Data JPA, Hibernate, Flyway Migrations
-- **Real-Time Communication**: Spring WebSocket, STOMP protocol, SockJS fallback
+- **Real-Time Communication**: Spring WebSocket, STOMP protocol, SockJS fallback, Disconnect Event Listeners
 - **Caching & Queue**: Spring Data Redis (Jedis / Lettuce over SSL)
 - **Rate Limiting**: Bucket4j In-Memory Token Bucket
 
 ### Frontend
 - **Interface**: Responsive HTML5, Modern CSS3 variables, Bootstrap 5.3
-- **Networking**: Fetch API with automated environment routing
+- **Bot Defense**: Google reCAPTCHA v2 Widget
+- **Networking**: Fetch API with automated environment routing and keepalive unload beacons
 - **Real-Time Streaming**: `@stomp/stompjs` & `sockjs-client`
 - **Avatars**: DiceBear API & Custom 2D Character Assets
 
 ### DevOps & Cloud Services
-- **Hosting**: Render (Docker containerized)
+- **Hosting**: Render (Docker containerized) & Vercel (Frontend Static Distribution)
 - **Database**: Supabase PostgreSQL (Session Pooler via IPv4)
 - **Cache**: Upstash Redis (Serverless TLS)
 - **Code Execution**: RapidAPI Judge0 CE
@@ -129,7 +140,7 @@ Managed with Flyway migrations located at `src/main/resources/db/migration/`:
 ## 📡 API & WebSocket Specification
 
 ### 🔑 Authentication (`/api/auth`)
-- `POST /api/auth/register` — Create account with username, email, password, and terms consent.
+- `POST /api/auth/register` — Create account with `username`, `email`, `password`, `termsConsent`, and optional `captchaToken`.
 - `POST /api/auth/login` — Authenticate and receive a 24h JWT token.
 - `GET /api/auth/me` — Retrieve the authenticated player's profile.
 
@@ -145,27 +156,36 @@ Managed with Flyway migrations located at `src/main/resources/db/migration/`:
 - `GET /api/matches/{id}` — Get match details, problem statement, and sample tests.
 - `GET /api/matches/active` — Check if current user has an ongoing match.
 - `POST /api/matches/{id}/submissions` — Submit code for judging via Judge0.
-- `POST /api/matches/{id}/forfeit` — Forfeit match (triggered on tab switch / manual forfeit).
+- `POST /api/matches/{id}/forfeit` — Forfeit match (triggered on explicit leave, tab switch, or disconnect).
 
 ### ⚡ WebSocket (STOMP) Destinations
 - **Endpoint**: `/ws` (with SockJS fallback)
 - **User Topic (`/topic/user/{userId}`)**: Receives `MATCH_FOUND`, `CHALLENGE_RECEIVED`, and `CHALLENGE_ACCEPTED`.
-- **Match Topic (`/topic/match/{matchId}`)**: Receives live `MATCH_START`, submission verdicts, and `MATCH_END`.
+- **Match Topic (`/topic/match/{matchId}`)**: Receives live `MATCH_START`, submission verdicts, and `MATCH_END` (with forfeit reasons and Elo deltas).
 
 ---
 
 ## 🛡️ Security & Anti-Cheat Protection
 
-1. **Tab-Switching & Window Defocus Detection:**
+1. **Bot & Disposable Email Defense:**
+   - Registration requires completing Google reCAPTCHA v2.
+   - Submitted emails are checked against `DisposableEmailBlocklist` containing 17+ disposable domains (`mailinator.com`, `10minutemail.com`, `tempmail.com`, etc.), rejecting fake accounts with HTTP 400.
+2. **Tab-Switching & Window Defocus Detection:**
    - The battle client monitors `visibilitychange` and `window.blur` events.
-   - If a player attempts to tab out or look up answers, the anti-cheat listener triggers an immediate forfeit (`POST /api/matches/{id}/forfeit`).
-2. **WebSocket STOMP Channel Authorization:**
+   - If a player attempts to tab out to browse solutions, the anti-cheat listener displays a warning or triggers an immediate forfeit (`POST /api/matches/{id}/forfeit`).
+3. **Real-Time Disconnect & Abandon Handling:**
+   - The backend `MatchSessionTracker` listens to WebSocket disconnect events.
+   - An auto-forfeit task is scheduled with a **6-second grace period** (allowing legitimate page reloads). If the user does not reconnect, they forfeit and the opponent is instantly awarded the win.
+   - Frontend triggers `keepalive` fetch beacons on `beforeunload` and `pagehide` ensuring forfeit requests reach the server even during abrupt tab closures.
+4. **URL Match ID Privacy:**
+   - Players transition into `match.html` using client-side `sessionStorage` rather than visible URL query parameters (`?matchId=...`), protecting active matches from URL shoulder-surfing.
+5. **WebSocket Channel Authorization:**
    - Custom `WebSocketSecurityInterceptor` checks JWT identity on every subscription.
-   - Players cannot snoop on other users' private queues or matches.
-3. **Atomic Winner Determination:**
-   - Winner assignment uses database-level conditional CAS queries (`WHERE id = ? AND winner_id IS NULL`), making race conditions mathematically impossible.
-4. **Brute Force Defense:**
-   - Bucket4j rate limits login attempts (5 req/min) and submission requests (10 req/min).
+   - Players cannot subscribe to unauthorized user queues or opponents' private channels.
+6. **Atomic Winner Determination:**
+   - Winner assignment uses database-level conditional CAS queries (`WHERE id = ? AND winner_id IS NULL`), making double-winner race conditions mathematically impossible.
+7. **Brute Force Defense:**
+   - Bucket4j rate limits authentication attempts (5 req/min), code submissions (10 req/min), and queue requests (15 req/min).
 
 ---
 
@@ -191,6 +211,7 @@ export JWT_SECRET="your-base64-encoded-256-bit-secret-key"
 export JUDGE0_URL="https://judge0-ce.p.rapidapi.com"
 export JUDGE0_MOCK_MODE="false"
 export RAPIDAPI_KEY="your_rapidapi_key"
+export RECAPTCHA_SECRET_KEY="" # Optional for local dev; leave empty to bypass
 ```
 
 ### 3. Build & Run Tests
@@ -211,6 +232,7 @@ Open **`http://localhost:8080/index.html`** in your browser.
 Codess is built with cloud-native Docker support and automated dynamic routing:
 
 - **Render Web Service**: Containerized multi-stage Docker build using `eclipse-temurin:17-jre` with low-memory JVM tuning (`-XX:+UseSerialGC -Xss512k -XX:MaxRAMPercentage=75.0`).
+- **Vercel Static Hosting**: Frontend distribution serving production assets with instant edge routing.
 - **Supabase PostgreSQL**: Configured with IPv4 session pooler (`aws-0-ap-south-1.pooler.supabase.com:5432`).
 - **Upstash Redis**: Serverless SSL queue for matchmaking.
 

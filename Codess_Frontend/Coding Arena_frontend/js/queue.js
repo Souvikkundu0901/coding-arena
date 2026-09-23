@@ -195,27 +195,48 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /**
-     * Connect to queue WebSocket.
+     * Connect to queue WebSocket and subscribe to user topic.
      *
      * @param {Object} user
      * @param {string} token
+     * @returns {Promise<void>}
      */
     function connectToQueueSocket(user, token) {
-        ws.connect(
-            user.id,
-            token,
-            () => {
-                console.log(
-                    "[Queue] WebSocket connected."
+        return new Promise((resolve, reject) => {
+            const timeoutId = setTimeout(() => {
+                reject(
+                    new Error("WebSocket connection timed out. Please try again.")
                 );
+            }, 10000);
 
-                ws.subscribeToUserTopic(
+            try {
+                ws.connect(
                     user.id,
                     token,
-                    handleUserEvent
+                    () => {
+                        clearTimeout(timeoutId);
+                        try {
+                            console.log(
+                                "[Queue] WebSocket connected."
+                            );
+
+                            ws.subscribeToUserTopic(
+                                user.id,
+                                token,
+                                handleUserEvent
+                            );
+
+                            resolve();
+                        } catch (subError) {
+                            reject(subError);
+                        }
+                    }
                 );
+            } catch (err) {
+                clearTimeout(timeoutId);
+                reject(err);
             }
-        );
+        });
     }
 
     /**
@@ -266,17 +287,21 @@ document.addEventListener("DOMContentLoaded", () => {
     async function startQueue(user, token) {
         try {
             updateQueueStatus(
+                "Connecting..."
+            );
+
+            await connectToQueueSocket(
+                user,
+                token
+            );
+
+            updateQueueStatus(
                 "Finding an opponent..."
             );
 
             await api.joinQueue();
 
             startQueueTimer();
-
-            connectToQueueSocket(
-                user,
-                token
-            );
         } catch (error) {
             console.error(
                 "[Queue] Failed to join queue:",

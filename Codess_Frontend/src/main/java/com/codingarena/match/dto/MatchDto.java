@@ -19,6 +19,9 @@ public class MatchDto {
     private List<PlayerSummaryDto> players = new java.util.ArrayList<>();
     private String status;
     private UUID winnerId;
+    private String winnerUsername;
+    private Integer winnerRatingDelta;
+    private Integer loserRatingDelta;
     private LocalDateTime startedAt;
     private LocalDateTime expiresAt;
     private LocalDateTime endedAt;
@@ -44,6 +47,15 @@ public class MatchDto {
         dto.setProblem(ProblemDto.fromEntity(match.getProblem()));
         dto.setStatus(match.getStatus());
         dto.setWinnerId(match.getWinnerId());
+        dto.setWinnerRatingDelta(match.getWinnerRatingDelta());
+        dto.setLoserRatingDelta(match.getLoserRatingDelta());
+        if (match.getWinnerId() != null) {
+            if (match.getPlayerA() != null && match.getPlayerA().getId().equals(match.getWinnerId())) {
+                dto.setWinnerUsername(match.getPlayerA().getUsername());
+            } else if (match.getPlayerB() != null && match.getPlayerB().getId().equals(match.getWinnerId())) {
+                dto.setWinnerUsername(match.getPlayerB().getUsername());
+            }
+        }
         dto.setStartedAt(match.getStartedAt());
         dto.setExpiresAt(match.getExpiresAt());
         dto.setEndedAt(match.getEndedAt());
@@ -164,5 +176,29 @@ public class MatchDto {
 
     public void setEndedAt(LocalDateTime endedAt) {
         this.endedAt = endedAt;
+    }
+
+    public String getWinnerUsername() {
+        return winnerUsername;
+    }
+
+    public void setWinnerUsername(String winnerUsername) {
+        this.winnerUsername = winnerUsername;
+    }
+
+    public Integer getWinnerRatingDelta() {
+        return winnerRatingDelta;
+    }
+
+    public void setWinnerRatingDelta(Integer winnerRatingDelta) {
+        this.winnerRatingDelta = winnerRatingDelta;
+    }
+
+    public Integer getLoserRatingDelta() {
+        return loserRatingDelta;
+    }
+
+    public void setLoserRatingDelta(Integer loserRatingDelta) {
+        this.loserRatingDelta = loserRatingDelta;
     }
 }

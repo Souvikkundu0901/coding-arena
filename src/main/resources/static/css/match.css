@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    CODING ARENA — LIVE 1v1 MATCH
    Visual direction follows the Figma competitive-coding UI.
    Functional selectors are intentionally preserved for match.js.
@@ -172,6 +172,34 @@
   background: var(--success);
   box-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
   animation: ca-live-pulse 1.5s ease-in-out infinite;
+}
+
+.ca-leave-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 9px;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ca-leave-btn:hover {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: rgba(239, 68, 68, 0.6);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.ca-leave-btn:active {
+  transform: translateY(0);
 }
 
 @keyframes ca-live-pulse {

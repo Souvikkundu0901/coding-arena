@@ -18,6 +18,12 @@ document.addEventListener(
         let matchTimerInterval = null;
         let matchEnded = false;
 
+        let matchStatus = null;
+
+        let tabViolationCount = 0;
+        let visibilityListenerAttached = false;
+        let forfeitInProgress = false;
+
         let preMatchCountdownStarted =
             false;
 
@@ -104,6 +110,230 @@ document.addEventListener(
 
                 matchTimerInterval = null;
             }
+        }
+
+        /**
+ * Show the one-time anti-cheat warning.
+ */
+        function showTabSwitchWarning() {
+            const existingWarning =
+                document.querySelector("#tabSwitchWarning");
+
+            if (existingWarning) {
+                return;
+            }
+
+            const warning = document.createElement("div");
+
+            warning.id = "tabSwitchWarning";
+            warning.className = "ca-anticheat-warning";
+            warning.setAttribute("role", "alert");
+            warning.setAttribute("aria-live", "assertive");
+
+            warning.innerHTML = `
+        <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+        <span>
+            Leaving the match tab may result in forfeiting the match.
+            This is your only warning.
+        </span>
+    `;
+
+            document.body.appendChild(warning);
+
+            setTimeout(() => {
+                warning.remove();
+            }, 6000);
+        }
+
+        /**
+         * Forfeit the current match after the second tab-switch violation.
+         * Send forfeit request via keepalive fetch (survives tab closure).
+         */
+        function sendForfeitBeacon() {
+            if (
+                matchEnded ||
+                matchStatus !== "IN_PROGRESS" ||
+                !matchId
+            ) {
+                return;
+            }
+
+            const token = getAuthToken();
+            if (!token) {
+                return;
+            }
+
+            try {
+                fetch(
+                    `${API_BASE}/matches/${encodeURIComponent(matchId)}/forfeit`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                            "Content-Type": "application/json"
+                        },
+                        keepalive: true
+                    }
+                ).catch(() => {});
+            } catch (e) {}
+        }
+
+        /**
+         * Forfeit the current match (tab-switch violation or explicit leave).
+         */
+        async function forfeitMatch() {
+            if (
+                forfeitInProgress ||
+                matchEnded ||
+                matchStatus !== "IN_PROGRESS" ||
+                !matchId
+            ) {
+                return;
+            }
+
+            forfeitInProgress = true;
+
+            try {
+                const token = getAuthToken();
+
+                if (!token) {
+                    console.error(
+                        "[Match] Cannot forfeit match: authentication token missing."
+                    );
+
+                    return;
+                }
+
+                const response = await fetch(
+                    `${API_BASE}/matches/${encodeURIComponent(matchId)}/forfeit`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                            "Content-Type": "application/json"
+                        },
+                        keepalive: true
+                    }
+                );
+
+                if (!response.ok) {
+                    let errorData = null;
+
+                    try {
+                        errorData = await response.json();
+                    } catch {
+                        errorData = null;
+                    }
+
+                    throw new Error(
+                        errorData?.error ||
+                        `Forfeit request failed (${response.status}).`
+                    );
+                }
+
+                console.log(
+                    "[Match] Forfeit request sent successfully."
+                );
+            } catch (error) {
+                console.error(
+                    "[Match] Failed to forfeit match:",
+                    error
+                );
+            } finally {
+                forfeitInProgress = false;
+            }
+        }
+
+        /**
+         * Handle user explicitly choosing to leave the match.
+         */
+        async function handleExplicitLeave() {
+            if (matchEnded || matchStatus !== "IN_PROGRESS") {
+                window.location.href = "index.html";
+                return;
+            }
+
+            const confirmed = window.confirm(
+                "Are you sure you want to leave?\n\nLeaving the match will count as a forfeit and your opponent will win."
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            try {
+                await forfeitMatch();
+            } finally {
+                window.location.href = "index.html";
+            }
+        }
+
+        /**
+         * Handle a visibility change while the match is active.
+         */
+        function handleVisibilityChange() {
+            if (
+                !document.hidden ||
+                matchEnded ||
+                matchStatus !== "IN_PROGRESS"
+            ) {
+                return;
+            }
+
+            tabViolationCount += 1;
+
+            console.log(
+                `[Match] Tab-switch violation #${tabViolationCount}`
+            );
+
+            if (tabViolationCount === 1) {
+                showTabSwitchWarning();
+                return;
+            }
+
+            if (tabViolationCount >= 2) {
+                forfeitMatch();
+            }
+        }
+
+        /**
+         * Start anti-cheat tab-switch detection.
+         */
+        function startTabSwitchDetection() {
+            if (visibilityListenerAttached) {
+                return;
+            }
+
+            document.addEventListener(
+                "visibilitychange",
+                handleVisibilityChange
+            );
+
+            visibilityListenerAttached = true;
+
+            console.log(
+                "[Match] Anti-cheat tab detection enabled."
+            );
+        }
+
+        /**
+         * Stop anti-cheat tab-switch detection.
+         */
+        function stopTabSwitchDetection() {
+            if (!visibilityListenerAttached) {
+                return;
+            }
+
+            document.removeEventListener(
+                "visibilitychange",
+                handleVisibilityChange
+            );
+
+            visibilityListenerAttached = false;
+
+            console.log(
+                "[Match] Anti-cheat tab detection disabled."
+            );
         }
 
         /**
@@ -1023,24 +1253,46 @@ document.addEventListener(
                     "Opponent";
             }
 
-            const winnerName =
-                eventData.winnerName ||
-                eventData.winner
-                    ?.username ||
-                eventData.winner
-                    ?.name ||
-                (String(
-                    eventData.winnerId
-                ) ===
-                    String(
-                        currentUser?.id
-                    )
-                    ? "You"
-                    : "Opponent");
+            const isForfeit = eventData.reason === "FORFEIT" || eventData.status === "FORFEITED";
+            const currentUserIdStr = String(currentUser?.id || "");
+            const winnerIdStr = String(eventData.winnerId || "");
+            const isWinner = Boolean(currentUserIdStr && winnerIdStr && (currentUserIdStr === winnerIdStr));
 
-            if (winnerElement) {
-                winnerElement.textContent =
-                    `${winnerName} won`;
+            const titleElement =
+                modal.querySelector(
+                    "#matchEndTitle"
+                );
+
+            if (isForfeit) {
+                if (isWinner) {
+                    if (titleElement) {
+                        titleElement.textContent = "Victory by Forfeit! 🏆";
+                    }
+                    if (winnerElement) {
+                        winnerElement.textContent = "Opponent left the match — You won!";
+                    }
+                } else {
+                    if (titleElement) {
+                        titleElement.textContent = "Match Forfeited";
+                    }
+                    if (winnerElement) {
+                        winnerElement.textContent = "You left/forfeited the match — Opponent won.";
+                    }
+                }
+            } else {
+                const winnerName =
+                    eventData.winnerUsername ||
+                    eventData.winnerName ||
+                    eventData.winner
+                        ?.username ||
+                    eventData.winner
+                        ?.name ||
+                    (isWinner ? "You" : (opponentUsername || "Opponent"));
+
+                if (winnerElement) {
+                    winnerElement.textContent =
+                        `${winnerName} won`;
+                }
             }
 
             const ratingChanges =
@@ -1048,15 +1300,28 @@ document.addEventListener(
                 eventData.ratings ||
                 {};
 
-            const currentUserChange =
+            let currentUserChange =
                 ratingChanges.currentUser ??
-                ratingChanges[
-                String(
-                    currentUser?.id
-                )
-                ] ??
+                ratingChanges[currentUserIdStr] ??
                 eventData.ratingChange ??
-                0;
+                null;
+
+            if (currentUserChange === null) {
+                if (eventData.winnerRatingDelta !== undefined && eventData.loserRatingDelta !== undefined) {
+                    currentUserChange = isWinner ? eventData.winnerRatingDelta : eventData.loserRatingDelta;
+                }
+            }
+            if (currentUserChange === null) {
+                currentUserChange = isWinner ? 16 : -16;
+            }
+
+            try {
+                if (currentUser && currentUser.rating !== undefined && currentUserChange) {
+                    const newRating = Math.max(0, Number(currentUser.rating) + Number(currentUserChange));
+                    currentUser.rating = newRating;
+                    localStorage.setItem("ca_user", JSON.stringify(currentUser));
+                }
+            } catch (e) {}
 
             const player1ChangeElement =
                 modal.querySelector(
@@ -1098,6 +1363,67 @@ document.addEventListener(
                 false;
         }
 
+        let matchPollInterval = null;
+
+        /**
+         * Start polling match status as a fallback in case WebSocket drops.
+         */
+        function startMatchPoll() {
+            if (matchPollInterval) {
+                return;
+            }
+
+            matchPollInterval = setInterval(async () => {
+                if (matchEnded || matchStatus !== "IN_PROGRESS" || !matchId) {
+                    stopMatchPoll();
+                    return;
+                }
+
+                try {
+                    const token = getAuthToken();
+                    if (!token) {
+                        return;
+                    }
+
+                    const response = await fetch(
+                        `${API_BASE}/matches/${encodeURIComponent(matchId)}`,
+                        {
+                            headers: {
+                                "Authorization": `Bearer ${token}`
+                            }
+                        }
+                    );
+
+                    if (response.ok) {
+                        const matchDetails = await response.json();
+                        if (
+                            matchDetails &&
+                            (matchDetails.status === "COMPLETED" || matchDetails.status === "EXPIRED")
+                        ) {
+                            console.log(
+                                "[Match] Detected match completion via polling:",
+                                matchDetails
+                            );
+                            stopMatchPoll();
+                            handleMatchEnd(matchDetails);
+                        }
+                    }
+                } catch (error) {
+                    // silent fallback
+                }
+            }, 3000);
+        }
+
+        /**
+         * Stop polling match status.
+         */
+        function stopMatchPoll() {
+            if (matchPollInterval) {
+                clearInterval(matchPollInterval);
+                matchPollInterval = null;
+            }
+        }
+
         /**
          * Handle MATCH_START.
          *
@@ -1109,6 +1435,10 @@ document.addEventListener(
         function handleMatchStart(
             eventData = {}
         ) {
+            matchStatus = "IN_PROGRESS";
+            startTabSwitchDetection();
+            startMatchPoll();
+
             const statusElement =
                 document.querySelector(
                     "#matchLiveStatus"
@@ -1159,7 +1489,10 @@ document.addEventListener(
             }
 
             matchEnded = true;
+            matchStatus = "ENDED";
+            stopTabSwitchDetection();
             stopMatchTimer();
+            stopMatchPoll();
 
             renderMatchEnd(
                 eventData
@@ -1199,11 +1532,22 @@ document.addEventListener(
                     );
                     break;
 
-                case "MATCH_END":
+                case "MATCH_END": {
+                    const matchData =
+                        event.data ||
+                        event.match ||
+                        {};
+
+                    if (event.reason) {
+                        matchData.reason =
+                            event.reason;
+                    }
+
                     handleMatchEnd(
-                        event.data
+                        matchData
                     );
                     break;
+                }
 
                 default:
                     console.log(
@@ -1362,6 +1706,16 @@ document.addEventListener(
                         matchId
                     );
 
+                matchStatus =
+                    String(match?.status || "").toUpperCase();
+
+                if (matchStatus === "IN_PROGRESS") {
+                    startTabSwitchDetection();
+                    startMatchPoll();
+                } else if (matchStatus === "COMPLETED" || matchStatus === "EXPIRED") {
+                    handleMatchEnd(match);
+                }
+
                 renderProblem(
                     match?.problem ||
                     {}
@@ -1494,6 +1848,38 @@ document.addEventListener(
                     }
                 );
             }
+
+            const leaveMatchBtn =
+                document.querySelector(
+                    "#leaveMatchBtn"
+                );
+
+            if (leaveMatchBtn) {
+                leaveMatchBtn.addEventListener(
+                    "click",
+                    handleExplicitLeave
+                );
+            }
+
+            const brandLink =
+                document.querySelector(
+                    ".ca-match-brand"
+                );
+
+            if (brandLink) {
+                brandLink.addEventListener(
+                    "click",
+                    (e) => {
+                        if (
+                            !matchEnded &&
+                            matchStatus === "IN_PROGRESS"
+                        ) {
+                            e.preventDefault();
+                            handleExplicitLeave();
+                        }
+                    }
+                );
+            }
         }
 
         /**
@@ -1598,9 +1984,30 @@ document.addEventListener(
         }
 
         window.addEventListener(
+            "pagehide",
+            () => {
+                if (
+                    !matchEnded &&
+                    matchStatus === "IN_PROGRESS"
+                ) {
+                    sendForfeitBeacon();
+                }
+            }
+        );
+
+        window.addEventListener(
             "beforeunload",
             () => {
+                if (
+                    !matchEnded &&
+                    matchStatus === "IN_PROGRESS"
+                ) {
+                    sendForfeitBeacon();
+                }
+
+                stopTabSwitchDetection();
                 stopMatchTimer();
+                stopMatchPoll();
 
                 if (
                     matchEnded &&

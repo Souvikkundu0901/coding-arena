@@ -26,10 +26,19 @@ public class WebSocketSecurityInterceptor implements ChannelInterceptor {
 
     private final JwtTokenProvider tokenProvider;
     private final MatchRepository matchRepository;
+    private final com.codingarena.match.service.MatchSessionTracker matchSessionTracker;
 
-    public WebSocketSecurityInterceptor(JwtTokenProvider tokenProvider, MatchRepository matchRepository) {
+    @org.springframework.beans.factory.annotation.Autowired
+    public WebSocketSecurityInterceptor(JwtTokenProvider tokenProvider,
+                                        MatchRepository matchRepository,
+                                        @org.springframework.context.annotation.Lazy @org.springframework.beans.factory.annotation.Autowired(required = false) com.codingarena.match.service.MatchSessionTracker matchSessionTracker) {
         this.tokenProvider = tokenProvider;
         this.matchRepository = matchRepository;
+        this.matchSessionTracker = matchSessionTracker;
+    }
+
+    public WebSocketSecurityInterceptor(JwtTokenProvider tokenProvider, MatchRepository matchRepository) {
+        this(tokenProvider, matchRepository, null);
     }
 
     @Override
@@ -66,6 +75,10 @@ public class WebSocketSecurityInterceptor implements ChannelInterceptor {
                         if (!isPlayerA && !isPlayerB) {
                             log.warn("User {} unauthorized to subscribe to match {}", userId, matchId);
                             throw new AccessDeniedException("Access denied to match topic");
+                        }
+
+                        if (matchSessionTracker != null && accessor.getSessionId() != null) {
+                            matchSessionTracker.registerSession(accessor.getSessionId(), userId, matchId);
                         }
 
                     } catch (IllegalArgumentException e) {
